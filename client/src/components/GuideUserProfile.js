@@ -2,34 +2,74 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import GuideNavBar from "./GuideNavBar";
 import GuideSideBar from "./GuideSideBar";
-import { ToastContainer } from "react-toastify";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 
 export default function GuideUserProfile() {
-  const [userDetails, setUserDetails] = useState([]);
+  const [guideUserDetails, setGuideUserDetails] = useState([]);
+  const [guideDetails, setGuideDetails] = useState([]);
 
   const loadData = async () => {
-    const response = await Axios.get("http://localhost:3001/guide/data");
-    setUserDetails(response.data);
-    console.log(userDetails);
+    const guideUserDataResponse = await Axios.get(
+      "http://localhost:3001/guide/userdata"
+    );
+    setGuideUserDetails(guideUserDataResponse.data);
+    //console.log(guideUserDetails);
+  };
+
+  const getGuideData = async () => {
+    const guideDataResponse = await Axios.get(
+      "http://localhost:3001/guide/data"
+    );
+    setGuideDetails(guideDataResponse.data);
+    console.log(guideDetails);
+    //console.log(guideDetails);
   };
 
   useEffect(() => {
     loadData();
+    console.log(guideDetails);
+    //
   }, []);
-  // Axios.get("http://localhost:3001/userprofile", {
-  //   userDetails: userDetails,
-  // }).then((response) => {
-  //   if (!response.data.message) {
-  //     console.log(response.data);
-  //     console.log("Successfully logged in");
 
-  //     document.getElementById("log").value = "";
-  //     document.getElementById("pass1").value = "";
-  //   } else {
-  //   }
-  // });
+  useEffect(() => {
+    getGuideData();
+  }, []);
+
+  const [guideName, setGuideName] = useState("");
+  const [guideAbout, setGuideAbout] = useState("");
+  const [guideDepartment, setGuideDepartment] = useState("");
+  const [guidePhone, setGuidePhone] = useState("");
+  const [guideEmail, setGuideEmail] = useState("");
+  const [guideGithub, setGuideGithub] = useState("");
+  const [status, setStatus] = useState("");
+
+  const saveGuideDetails = (event) => {
+    event.preventDefault();
+    //console.log("Hello");
+    // console.log(
+    //   guideName,
+    //   guideAbout,
+    //   guideDepartment,
+    //   guidePhone,
+    //   guideEmail,
+    //   guideGithub
+    // );
+
+    Axios.post("http://localhost:3001/saveGuideDetails", {
+      guide_name: guideName,
+      guide_about: guideAbout,
+      department: guideDepartment,
+      guide_phone: guidePhone,
+      guide_email: guideEmail,
+      guide_github: guideGithub,
+    })
+      .then((response) => {
+        //console.log(response);
+        setStatus({ type: "success" });
+      })
+      .catch((error) => {
+        setStatus({ type: "Error" });
+      });
+  };
 
   return (
     <>
@@ -60,21 +100,13 @@ export default function GuideUserProfile() {
                     alt="Profile"
                     className="rounded-circle"
                   />
-                  <h2>
-                    <table>
-                      <tbody>
-                        {userDetails.map((item, index) => {
-                          return (
-                            <tr key={index}>
-                              <td>{item.username}</td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </h2>
+
+                  {guideDetails.map((item) => {
+                    return <h2>{item.Guide_Name}</h2>;
+                  })}
+
                   <h3>
-                    {userDetails.map((item, index) => {
+                    {guideUserDetails.map((item, index) => {
                       return (
                         <tr key={index}>
                           <td>{item.userrole}</td>
@@ -83,17 +115,11 @@ export default function GuideUserProfile() {
                     })}
                   </h3>
                   <div className="social-links mt-2">
-                    <a href="#" className="twitter">
-                      <i className="bi bi-twitter" />
+                    <a href="#" className="envelope">
+                      <i className="bi bi-envelope" />
                     </a>
-                    <a href="#" className="facebook">
-                      <i className="bi bi-facebook" />
-                    </a>
-                    <a href="#" className="instagram">
-                      <i className="bi bi-instagram" />
-                    </a>
-                    <a href="#" className="linkedin">
-                      <i className="bi bi-linkedin" />
+                    <a href="#" className="github">
+                      <i className="bi bi-github" />
                     </a>
                   </div>
                 </div>
@@ -148,52 +174,71 @@ export default function GuideUserProfile() {
                     >
                       <h5 className="card-title">About</h5>
                       <p className="small fst-italic">
-                        Sunt est soluta temporibus accusantium neque nam maiores
-                        cumque temporibus. Tempora libero non est unde veniam
-                        est qui dolor. Ut sunt iure rerum quae quisquam autem
-                        eveniet perspiciatis odit. Fuga sequi sed ea saepe at
-                        unde.
+                        {guideDetails.map((item) => {
+                          return <>{item.Guide_About}</>;
+                        })}
                       </p>
                       <h5 className="card-title">Profile Details</h5>
+                      <div className="row">
+                        <div className="col-lg-3 col-md-4 label ">Guide ID</div>
+                        <div className="col-lg-9 col-md-8">
+                          {guideUserDetails.map((item, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{item.username}</td>
+                              </tr>
+                            );
+                          })}
+                        </div>
+                      </div>
                       <div className="row">
                         <div className="col-lg-3 col-md-4 label ">
                           Full Name
                         </div>
-                        <div className="col-lg-9 col-md-8">Kevin Anderson</div>
-                      </div>
-                      <div className="row">
-                        <div className="col-lg-3 col-md-4 label">Company</div>
                         <div className="col-lg-9 col-md-8">
-                          Lueilwitz, Wisoky and Leuschke
+                          {guideDetails.map((item) => {
+                            return <>{item.Guide_Name}</>;
+                          })}
                         </div>
                       </div>
                       <div className="row">
-                        <div className="col-lg-3 col-md-4 label">Job</div>
-                        <div className="col-lg-9 col-md-8">Web Designer</div>
-                      </div>
-                      <div className="row">
-                        <div className="col-lg-3 col-md-4 label">Country</div>
-                        <div className="col-lg-9 col-md-8">USA</div>
-                      </div>
-                      <div className="row">
-                        <div className="col-lg-3 col-md-4 label">Address</div>
+                        <div className="col-lg-3 col-md-4 label">
+                          Department
+                        </div>
                         <div className="col-lg-9 col-md-8">
-                          A108 Adam Street, New York, NY 535022
+                          {guideDetails.map((item) => {
+                            return <>{item.Department}</>;
+                          })}
                         </div>
                       </div>
                       <div className="row">
-                        <div className="col-lg-3 col-md-4 label">Phone</div>
+                        <div className="col-lg-3 col-md-4 label">
+                          Mobile Number
+                        </div>
                         <div className="col-lg-9 col-md-8">
-                          (436) 486-3538 x29071
+                          {guideDetails.map((item) => {
+                            return <>{item.Guide_Phone}</>;
+                          })}
                         </div>
                       </div>
                       <div className="row">
                         <div className="col-lg-3 col-md-4 label">Email</div>
                         <div className="col-lg-9 col-md-8">
-                          k.anderson@example.com
+                          {guideDetails.map((item) => {
+                            return <>{item.Guide_Email}</>;
+                          })}
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-lg-3 col-md-4 label">Github</div>
+                        <div className="col-lg-9 col-md-8">
+                          {guideDetails.map((item) => {
+                            return <>{item.Guide_Github}</>;
+                          })}
                         </div>
                       </div>
                     </div>
+
                     <div
                       className="tab-pane fade profile-edit pt-3"
                       id="profile-edit"
@@ -230,6 +275,7 @@ export default function GuideUserProfile() {
                             </div>
                           </div>
                         </div>
+
                         <div className="row mb-3">
                           <label
                             htmlFor="fullName"
@@ -243,7 +289,10 @@ export default function GuideUserProfile() {
                               type="text"
                               className="form-control"
                               id="fullName"
-                              defaultValue="Kevin Anderson"
+                              defaultValue=""
+                              onChange={(e) => {
+                                setGuideName(e.target.value);
+                              }}
                             />
                           </div>
                         </div>
@@ -260,9 +309,10 @@ export default function GuideUserProfile() {
                               className="form-control"
                               id="about"
                               style={{ height: "100px" }}
-                              defaultValue={
-                                "Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde."
-                              }
+                              defaultValue={""}
+                              onChange={(e) => {
+                                setGuideAbout(e.target.value);
+                              }}
                             />
                           </div>
                         </div>
@@ -271,7 +321,7 @@ export default function GuideUserProfile() {
                             htmlFor="company"
                             className="col-md-4 col-lg-3 col-form-label"
                           >
-                            Company
+                            Department
                           </label>
                           <div className="col-md-8 col-lg-9">
                             <input
@@ -279,7 +329,10 @@ export default function GuideUserProfile() {
                               type="text"
                               className="form-control"
                               id="company"
-                              defaultValue="Lueilwitz, Wisoky and Leuschke"
+                              defaultValue=""
+                              onChange={(e) => {
+                                setGuideDepartment(e.target.value);
+                              }}
                             />
                           </div>
                         </div>
@@ -288,7 +341,7 @@ export default function GuideUserProfile() {
                             htmlFor="Job"
                             className="col-md-4 col-lg-3 col-form-label"
                           >
-                            Job
+                            Phone Number
                           </label>
                           <div className="col-md-8 col-lg-9">
                             <input
@@ -296,7 +349,10 @@ export default function GuideUserProfile() {
                               type="text"
                               className="form-control"
                               id="Job"
-                              defaultValue="Web Designer"
+                              defaultValue=""
+                              onChange={(e) => {
+                                setGuidePhone(e.target.value);
+                              }}
                             />
                           </div>
                         </div>
@@ -305,7 +361,7 @@ export default function GuideUserProfile() {
                             htmlFor="Country"
                             className="col-md-4 col-lg-3 col-form-label"
                           >
-                            Country
+                            Email Address
                           </label>
                           <div className="col-md-8 col-lg-9">
                             <input
@@ -313,118 +369,20 @@ export default function GuideUserProfile() {
                               type="text"
                               className="form-control"
                               id="Country"
-                              defaultValue="USA"
+                              defaultValue=""
+                              onChange={(e) => {
+                                setGuideEmail(e.target.value);
+                              }}
                             />
                           </div>
                         </div>
-                        <div className="row mb-3">
-                          <label
-                            htmlFor="Address"
-                            className="col-md-4 col-lg-3 col-form-label"
-                          >
-                            Address
-                          </label>
-                          <div className="col-md-8 col-lg-9">
-                            <input
-                              name="address"
-                              type="text"
-                              className="form-control"
-                              id="Address"
-                              defaultValue="A108 Adam Street, New York, NY 535022"
-                            />
-                          </div>
-                        </div>
-                        <div className="row mb-3">
-                          <label
-                            htmlFor="Phone"
-                            className="col-md-4 col-lg-3 col-form-label"
-                          >
-                            Phone
-                          </label>
-                          <div className="col-md-8 col-lg-9">
-                            <input
-                              name="phone"
-                              type="text"
-                              className="form-control"
-                              id="Phone"
-                              defaultValue="(436) 486-3538 x29071"
-                            />
-                          </div>
-                        </div>
-                        <div className="row mb-3">
-                          <label
-                            htmlFor="Email"
-                            className="col-md-4 col-lg-3 col-form-label"
-                          >
-                            Email
-                          </label>
-                          <div className="col-md-8 col-lg-9">
-                            <input
-                              name="email"
-                              type="email"
-                              className="form-control"
-                              id="Email"
-                              defaultValue="k.anderson@example.com"
-                            />
-                          </div>
-                        </div>
-                        <div className="row mb-3">
-                          <label
-                            htmlFor="Twitter"
-                            className="col-md-4 col-lg-3 col-form-label"
-                          >
-                            Twitter Profile
-                          </label>
-                          <div className="col-md-8 col-lg-9">
-                            <input
-                              name="twitter"
-                              type="text"
-                              className="form-control"
-                              id="Twitter"
-                              defaultValue="https://twitter.com/#"
-                            />
-                          </div>
-                        </div>
-                        <div className="row mb-3">
-                          <label
-                            htmlFor="Facebook"
-                            className="col-md-4 col-lg-3 col-form-label"
-                          >
-                            Facebook Profile
-                          </label>
-                          <div className="col-md-8 col-lg-9">
-                            <input
-                              name="facebook"
-                              type="text"
-                              className="form-control"
-                              id="Facebook"
-                              defaultValue="https://facebook.com/#"
-                            />
-                          </div>
-                        </div>
-                        <div className="row mb-3">
-                          <label
-                            htmlFor="Instagram"
-                            className="col-md-4 col-lg-3 col-form-label"
-                          >
-                            Instagram Profile
-                          </label>
-                          <div className="col-md-8 col-lg-9">
-                            <input
-                              name="instagram"
-                              type="text"
-                              className="form-control"
-                              id="Instagram"
-                              defaultValue="https://instagram.com/#"
-                            />
-                          </div>
-                        </div>
+
                         <div className="row mb-3">
                           <label
                             htmlFor="Linkedin"
                             className="col-md-4 col-lg-3 col-form-label"
                           >
-                            Linkedin Profile
+                            Github
                           </label>
                           <div className="col-md-8 col-lg-9">
                             <input
@@ -432,12 +390,23 @@ export default function GuideUserProfile() {
                               type="text"
                               className="form-control"
                               id="Linkedin"
-                              defaultValue="https://linkedin.com/#"
+                              defaultValue=""
+                              onChange={(e) => {
+                                setGuideGithub(e.target.value);
+                              }}
                             />
                           </div>
                         </div>
                         <div className="text-center">
-                          <button type="submit" className="btn btn-primary">
+                          <button
+                            type="submit"
+                            className="btn btn-primary"
+                            onClick={(e) => {
+                              saveGuideDetails(e);
+                              getGuideData();
+                              //navigate("/login");
+                            }}
+                          >
                             Save Changes
                           </button>
                         </div>
