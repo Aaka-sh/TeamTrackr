@@ -17,8 +17,10 @@ export default function Login() {
       password: password,
     }).then((response) => {
       console.log(response);
-      if (response.data === "Success") {
+      if (response.data[0].userrole == "Project Guide") {
         navigate("/guidedashboard");
+      } else if (response.data[0].userrole == "Student") {
+        navigate("/studentdashboard");
       } else if (response.data === "IncorrectPassword") {
         console.log("Incorrect password");
       } else {

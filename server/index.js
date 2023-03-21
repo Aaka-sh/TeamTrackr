@@ -50,7 +50,7 @@ app.post("/register", (req, res) => {
 
 // Login
 app.post("/login", function (req, res) {
-  console.log(req.body);
+  console.log(1 + req.body);
   let { username, password } = req.body;
 
   let selectSQl = "SELECT * FROM `users` WHERE `username` = '" + username + "'";
@@ -64,7 +64,8 @@ app.post("/login", function (req, res) {
         sessions.username = username;
         console.log("1" + sessions.username);
 
-        res.send("Success");
+        res.send(rows);
+        //res.send("Success");
         console.log("success");
       } else {
         res.send("IncorrectPassword");
@@ -77,9 +78,22 @@ app.post("/login", function (req, res) {
 
 //get user (guide) information
 app.get("/guide/userdata", (req, res) => {
-  console.log("2" + sessions.username);
+  //console.log(sessions.username);
   const sqlGet =
     "SELECT * FROM USERS WHERE USERROLE = 'Project Guide' and username = '" +
+    sessions.username +
+    "'";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//get user (student) information
+app.get("/student/userdata", (req, res) => {
+  //console.log(sessions.username);
+  const sqlGet =
+    "SELECT * FROM USERS WHERE USERROLE = 'Student' and username = '" +
     sessions.username +
     "'";
   db.query(sqlGet, (error, result) => {
@@ -118,11 +132,52 @@ app.post("/saveGuideDetails", (req, res) => {
   });
 });
 
+//update the student details
+app.post("/saveStudentDetails", (req, res) => {
+  const {
+    student_name,
+    student_about,
+    department,
+    student_phone,
+    student_email,
+    student_github,
+  } = req.body;
+  console.log(req.body);
+
+  var fields = [
+    student_name,
+    student_about,
+    department,
+    student_phone,
+    student_email,
+    student_github,
+    sessions.username,
+  ];
+  var updateQuery =
+    "UPDATE student SET student_name = ?, student_about = ?, department=?, student_phone = ?, student_email = ?, student_github = ? where student_id =  ?";
+
+  db.execute(updateQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
 //get guide information
 app.get("/guide/data", (req, res) => {
   console.log("3" + sessions.username);
   const sqlGet =
     "SELECT * FROM GUIDE WHERE Guide_id = '" + sessions.username + "'";
+  db.execute(sqlGet, (error, result) => {
+    res.send(result);
+    console.log("3" + result);
+  });
+});
+
+//get student information
+app.get("/student/data", (req, res) => {
+  console.log("Student Error" + sessions.username);
+  const sqlGet =
+    "SELECT * FROM STUDENT WHERE Student_id = '" + sessions.username + "'";
   db.execute(sqlGet, (error, result) => {
     res.send(result);
     console.log("3" + result);
@@ -157,6 +212,34 @@ app.post("/guide/addTeam", (req, res) => {
     console.log(err);
     res.send(result);
   });
+});
+
+//get teams information
+app.get("/getTeams", (req, res) => {
+  //console.log(sessions.username);
+  const sqlGet =
+    "SELECT * FROM TEAM WHERE Guide_ID = '" + sessions.username + "'";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//admin-authentication
+app.get("/guide-auth", (req, res) => {
+  console.log(sessions.username);
+  if (sessions.username === undefined) {
+    res.send("fail");
+  } else {
+    res.send("success");
+  }
+});
+
+//logout
+app.get("/logout", (req, res) => {
+  sessions.username = undefined;
+  console.log("logged out");
+  res.send("success");
 });
 
 //app listening to port 3001

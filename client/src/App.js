@@ -7,6 +7,8 @@ import Login from "./components/Login";
 import Home from "./components/Home";
 import GuideDashboard from "./components/GuideDashboard";
 import GuideUserProfile from "./components/GuideUserProfile";
+import StudentDashboard from "./components/StudentDashboard";
+import StudentUserProfile from "./components/StudentUserProfile";
 import AddTeam from "./components/AddTeam";
 import AddTask from "./components/AddTask";
 import Evalution from "./components/Evaluation";
@@ -23,6 +25,11 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/guidedashboard" element={<GuideDashboard />} />
             <Route path="/guideuserprofile" element={<GuideUserProfile />} />
+            <Route path="/studentdashboard" element={<StudentDashboard />} />
+            <Route
+              path="/studentuserprofile"
+              element={<StudentUserProfile />}
+            />
             <Route path="/addteam" element={<AddTeam />} />
             <Route path="/addtask" element={<AddTask />} />
             <Route path="/evaluation" element={<Evalution />} />

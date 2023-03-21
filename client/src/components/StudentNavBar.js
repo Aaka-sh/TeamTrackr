@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-export default function GuideNavBar() {
+export default function StudentNavBar() {
   const navigate = useNavigate();
   useEffect(() => {
     axios.get("http://localhost:3001/guide-auth").then((res) => {
