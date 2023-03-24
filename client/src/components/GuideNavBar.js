@@ -236,7 +236,7 @@ export default function GuideNavBar() {
               <li>
                 <a
                   className="dropdown-item d-flex align-items-center"
-                  href="users-profile.html"
+                  href="/guideuserprofile"
                 >
                   <i className="bi bi-person" />
                   <span>My Profile</span>
@@ -257,15 +257,7 @@ export default function GuideNavBar() {
               <li>
                 <hr className="dropdown-divider" />
               </li>
-              <li>
-                <a
-                  className="dropdown-item d-flex align-items-center"
-                  href="pages-faq.html"
-                >
-                  <i className="bi bi-question-circle" />
-                  <span>Need Help?</span>
-                </a>
-              </li>
+
               <li>
                 <hr className="dropdown-divider" />
               </li>

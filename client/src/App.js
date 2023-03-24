@@ -13,6 +13,7 @@ import AddTeam from "./components/AddTeam";
 import AddTask from "./components/AddTask";
 import Evalution from "./components/Evaluation";
 import ViewTask from "./components/ViewTask";
+import AddSession from "./components/AddSession";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="/addtask" element={<AddTask />} />
             <Route path="/evaluation" element={<Evalution />} />
             <Route path="/viewtask" element={<ViewTask />} />
+            <Route path="/addsession" element={<AddSession />} />
           </Routes>
         </div>
       </Router>

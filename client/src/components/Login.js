@@ -112,8 +112,12 @@ export default function Login() {
                         </div>
                         <div className="col-12">
                           <button
-                            className="btn btn-primary w-100"
+                            className="btn w-100"
                             type="button"
+                            style={{
+                              backgroundColor: "#012970",
+                              color: "white",
+                            }}
                             onClick={() => {
                               login();
                             }}

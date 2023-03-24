@@ -29,7 +29,7 @@ export default function GuideSideBar() {
         <li className="nav-item">
           <a className="nav-link collapsed" href="/addtask">
             <i className="bi bi-list-task" />
-            <span>Add Tasks</span>
+            <span>Add Weekly Task</span>
           </a>
         </li>
         {/* End Add Tasks Nav */}

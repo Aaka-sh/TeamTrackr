@@ -64,7 +64,7 @@ export default function AddTeam() {
 
         <section className="section profile">
           <div className="row">
-            <div className="col-xl-8">
+            <div className="col-xl-12">
               <div className="card">
                 <div className="card-body pt-3">
                   <h3>Enter Team Information</h3>
@@ -220,7 +220,11 @@ export default function AddTeam() {
                     <div className="text-center">
                       <button
                         type="submit"
-                        className="btn btn-primary"
+                        className="btn"
+                        style={{
+                          backgroundColor: "#012971",
+                          color: "white",
+                        }}
                         onClick={(e) => {
                           addTeam(e);
                         }}

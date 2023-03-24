@@ -27,10 +27,9 @@ export default function GuideDashboardMain() {
         </div>
 
         {/* End Page Title */}
-
-        {teamDetails.map((item) => {
-          return (
-            <div className="d-flex flex-row">
+        <div className="d-flex flex-row gap-4 flex-wrap">
+          {teamDetails.map((item) => {
+            return (
               <TeamCards
                 guide_id={item.Guide_ID}
                 team_id={item.Team_ID}
@@ -40,9 +39,9 @@ export default function GuideDashboardMain() {
                 member2={item.Member2}
                 member3={item.Member3}
               />
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </main>
     </>
   );

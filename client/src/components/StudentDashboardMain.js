@@ -28,9 +28,9 @@ export default function StudentDashboardMain() {
         </div>
 
         {/* End Page Title */}
-        {taskDetails.map((item) => {
-          return (
-            <div className="d-flex flex-row">
+        <div className="d-flex flex-row gap-4 flex-wrap">
+          {taskDetails.map((item) => {
+            return (
               <TaskCards
                 task_number={item.task_number}
                 guide_id={item.guide_id}
@@ -39,9 +39,9 @@ export default function StudentDashboardMain() {
                 start_date={item.start_date}
                 end_date={item.end_date}
               />
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </main>
     </>
   );

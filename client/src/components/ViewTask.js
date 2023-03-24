@@ -30,7 +30,7 @@ export default function ViewTask() {
             </ol>
           </nav>
         </div>
-        <div className="d-flex flex-row gap-4 flex-wrap">
+        <div className="d-flex flex-row gap-5 flex-wrap">
           {/* End Page Title */}
           {taskDetails.map((item) => {
             return (

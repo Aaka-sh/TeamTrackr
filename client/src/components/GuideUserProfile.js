@@ -400,7 +400,11 @@ export default function GuideUserProfile() {
                         <div className="text-center">
                           <button
                             type="submit"
-                            className="btn btn-primary"
+                            className="btn"
+                            style={{
+                              backgroundColor: "#012971",
+                              color: "white",
+                            }}
                             onClick={(e) => {
                               saveGuideDetails(e);
                               getGuideData();
