@@ -12,6 +12,7 @@ import StudentUserProfile from "./components/StudentUserProfile";
 import AddTeam from "./components/AddTeam";
 import AddTask from "./components/AddTask";
 import Evalution from "./components/Evaluation";
+import ViewTask from "./components/ViewTask";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/addteam" element={<AddTeam />} />
             <Route path="/addtask" element={<AddTask />} />
             <Route path="/evaluation" element={<Evalution />} />
+            <Route path="/viewtask" element={<ViewTask />} />
           </Routes>
         </div>
       </Router>

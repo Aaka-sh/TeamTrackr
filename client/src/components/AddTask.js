@@ -4,38 +4,31 @@ import GuideSideBar from "./GuideSideBar";
 import Axios from "axios";
 
 export default function AddTask() {
-  const [taskID, setTaskID] = useState("");
-  const [teamID, setTeamID] = useState("");
-  const [guideID, setGuideID] = useState("");
+  const [taskNumber, setTaskNumber] = useState("");
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [taskStatus, setTaskStatus] = useState("");
   const [status, setStatus] = useState("");
 
   const addTask = (event) => {
     event.preventDefault();
-    console.log("Hello");
+    //console.log("Hello");
     console.log(
-      taskID,
-      teamID,
-      guideID,
+      taskNumber,
       taskName,
       taskDescription,
       startDate,
-      endDate,
-      taskStatus
+      endDate
+      //taskStatus
     );
 
-    Axios.post("http://localhost:3001/guide/addTask", {
-      task_id: taskID,
-      team_id: teamID,
+    Axios.post("http://localhost:3001/guide/addtask", {
+      task_number: taskNumber,
       task_name: taskName,
       task_description: taskDescription,
       start_date: startDate,
       end_date: endDate,
-      task_status: taskStatus,
     })
       .then((response) => {
         //console.log(response);
@@ -56,7 +49,7 @@ export default function AddTask() {
           <nav>
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="index.html">Home</a>
+                <a href="/guidedashboard">Home</a>
               </li>
 
               <li className="breadcrumb-item active">Add Tasks</li>
@@ -90,7 +83,7 @@ export default function AddTask() {
                           id="teamNumber"
                           defaultValue=""
                           onChange={(e) => {
-                            setTaskID(e.target.value);
+                            setTaskNumber(e.target.value);
                           }}
                         />
                       </div>
@@ -101,17 +94,17 @@ export default function AddTask() {
                         htmlFor="teamID"
                         className="col-md-4 col-lg-3 col-form-label"
                       >
-                        Team ID
+                        Task Name
                       </label>
                       <div className="col-md-8 col-lg-9">
                         <input
-                          name="teamID"
+                          name="taskName"
                           type="text"
                           className="form-control"
-                          id="teamID"
+                          id="taskname"
                           defaultValue=""
                           onChange={(e) => {
-                            setTeamID(e.target.value);
+                            setTaskName(e.target.value);
                           }}
                         />
                       </div>
@@ -187,7 +180,7 @@ export default function AddTask() {
                           addTask(e);
                         }}
                       >
-                        Add Team
+                        Add Task
                       </button>
                     </div>
                   </form>

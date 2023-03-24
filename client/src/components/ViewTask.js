@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import TaskCards from "./TaskCards";
+import StudentSideBar from "./StudentSideBar";
+import StudentNavBar from "./StudentNavBar";
 
-export default function StudentDashboardMain() {
+export default function ViewTask() {
   const [taskDetails, setTaskDetails] = useState([]);
 
   const getTasks = async () => {
@@ -17,6 +19,8 @@ export default function StudentDashboardMain() {
 
   return (
     <>
+      <StudentSideBar />
+      <StudentNavBar />
       <main id="main" className="main">
         <div className="pagetitle">
           <h1>Tasks</h1>
@@ -26,11 +30,10 @@ export default function StudentDashboardMain() {
             </ol>
           </nav>
         </div>
-
-        {/* End Page Title */}
-        {taskDetails.map((item) => {
-          return (
-            <div className="d-flex flex-row">
+        <div className="d-flex flex-row gap-4 flex-wrap">
+          {/* End Page Title */}
+          {taskDetails.map((item) => {
+            return (
               <TaskCards
                 task_number={item.task_number}
                 guide_id={item.guide_id}
@@ -39,9 +42,9 @@ export default function StudentDashboardMain() {
                 start_date={item.start_date}
                 end_date={item.end_date}
               />
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </main>
     </>
   );

@@ -225,6 +225,40 @@ app.get("/getTeams", (req, res) => {
   });
 });
 
+//add a task
+app.post("/guide/addtask", (req, res) => {
+  const { task_number, task_name, task_description, start_date, end_date } =
+    req.body;
+  console.log(req.body);
+  console.log(sessions.username);
+  var fields = [
+    task_number,
+    sessions.username,
+    task_name,
+    task_description,
+    start_date,
+    end_date,
+  ];
+  console.log(fields);
+  var insertQuery =
+    "Insert into tasks(task_number, guide_id, task_name, task_description, start_date, end_date) values(?,?,?,?,?,?)";
+
+  db.execute(insertQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
+//get tasks information
+app.get("/getTasks", (req, res) => {
+  console.log(sessions.username);
+  const sqlGet = "SELECT * FROM TASKS";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
 //admin-authentication
 app.get("/guide-auth", (req, res) => {
   console.log(sessions.username);
