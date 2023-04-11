@@ -50,7 +50,7 @@ app.post("/register", (req, res) => {
 
 // Login
 app.post("/login", function (req, res) {
-  console.log(1 + req.body);
+  //console.log(1 + req.body);
   let { username, password } = req.body;
 
   let selectSQl = "SELECT * FROM `users` WHERE `username` = '" + username + "'";
@@ -184,6 +184,25 @@ app.get("/student/data", (req, res) => {
   });
 });
 
+//get guide for student
+app.get("/guideforstudent", (req, res) => {
+  console.log(sessions.username);
+  const sqlGet =
+    "select * from guide where guide_id = (select guide_id from team where member1 = (select student_name from student where student_id = '" +
+    sessions.username +
+    "') or member2 = (select student_name from student where student_id = '" +
+    sessions.username +
+    "') or member3 = (select student_name from student where student_id = '" +
+    sessions.username +
+    "'))";
+
+  db.execute(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+    //console.log(sessions.username);
+  });
+});
+
 //add a team
 app.post("/guide/addTeam", (req, res) => {
   const {
@@ -253,6 +272,127 @@ app.post("/guide/addtask", (req, res) => {
 app.get("/getTasks", (req, res) => {
   console.log(sessions.username);
   const sqlGet = "SELECT * FROM TASKS";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    //console.log(result);
+  });
+});
+
+//add session
+//addsession
+app.post("/guide/addsession", (req, res) => {
+  const {
+    session_number,
+    task_number,
+    session_name,
+    session_description,
+    date,
+  } = req.body;
+  console.log(req.body);
+  console.log(sessions.username);
+  var fields = [
+    session_number,
+    task_number,
+    sessions.username,
+    session_name,
+    session_description,
+    date,
+  ];
+  console.log(fields);
+  var insertQuery =
+    "Insert into session(session_number, task_number, guide_id, session_name, session_description, date) values(?,?,?,?,?,?)";
+  db.execute(insertQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
+//get session information
+app.get("/getSessions", (req, res) => {
+  console.log(sessions.username);
+  const sqlGet =
+    "SELECT * FROM SESSION where task_number = " + req.query.task_number;
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//get session information for students
+app.get("/getStudentSessions", (req, res) => {
+  console.log(sessions.username);
+  const sqlGet =
+    "SELECT * FROM SESSION where task_number = " + req.query.task_number;
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//make entry in the project diary
+app.post("/makeentry", (req, res) => {
+  const {
+    task_number,
+    session_number,
+    work_planned,
+    work_completed,
+    entry_date,
+  } = req.body;
+  console.log(req.body);
+  console.log(sessions.username);
+  var fields = [
+    sessions.username,
+    task_number,
+    session_number,
+    work_planned,
+    work_completed,
+    entry_date,
+  ];
+  console.log(fields);
+  var insertQuery =
+    "Insert into Project_Diary(username, task_number, session_number, work_planned, work_completed, entry_date) values(?,?,?,?,?,?)";
+  db.execute(insertQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
+//get project entry information
+app.get("/getentries", (req, res) => {
+  console.log(sessions.username);
+  const sqlGet =
+    "SELECT * FROM PROJECT_DIARY WHERE USERNAME = '" + sessions.username + "'";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//get project diary entry information for the guide
+app.get("/projectDiaryEntry", (req, res) => {
+  console.log(sessions.username);
+  const sqlGet = "SELECT * FROM PROJECT_DIARY";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//get names of the students for project diary entry cards in the evaluation (for guide's module)
+app.get("/getStudentNames", (req, res) => {
+  console.log(sessions.username);
+  const sqlGet = "SELECT * FROM student where student_id like 'S%'";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//get student submissions for guides
+app.get("/getStudentSubmissions", (req, res) => {
+  console.log("Hi" + req.query.id);
+  const sqlGet =
+    "SELECT * FROM project_diary where username = '" + req.query.id + "'";
   db.query(sqlGet, (error, result) => {
     res.send(result);
     console.log(result);

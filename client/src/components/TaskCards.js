@@ -28,6 +28,19 @@ export default function TaskCards(props) {
             </tr>
           </tbody>
         </table>
+
+        <div className="text-center">
+          <a
+            href="/viewsession"
+            className="btn w-100"
+            style={{ backgroundColor: "#012970", color: "white" }}
+            onClick={() => {
+              sessionStorage.setItem("StudentWeekNumber", props.task_number);
+            }}
+          >
+            View Session
+          </a>
+        </div>
       </div>
     </div>
   );

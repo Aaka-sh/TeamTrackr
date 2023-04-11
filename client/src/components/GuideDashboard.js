@@ -6,10 +6,10 @@ import GuideUserProfile from "./GuideUserProfile";
 
 export default function GuideDashboard() {
   return (
-    <>
+    <div className="ml-5">
       <GuideNavBar />
       <GuideSideBar />
       <GuideDashboardMain />
-    </>
+    </div>
   );
 }

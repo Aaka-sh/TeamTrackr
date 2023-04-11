@@ -6,10 +6,10 @@ import StudentUserProfile from "./StudentUserProfile";
 
 export default function GuideDashboard() {
   return (
-    <>
+    <div className="ml-5">
       <StudentNavBar />
       <StudentSideBar />
       <StudentDashboardMain />
-    </>
+    </div>
   );
 }

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Axios from "axios";
 
 export default function GuideSideBar() {
   return (
@@ -33,6 +34,13 @@ export default function GuideSideBar() {
           </a>
         </li>
         {/* End Add Tasks Nav */}
+        <li className="nav-item">
+          <a className="nav-link collapsed" href="/viewprogress">
+            <i className="bi bi-graph-up-arrow" />
+            <span>View Progress</span>
+          </a>
+        </li>
+        {/* End Evaluation Nav */}
         <li className="nav-item">
           <a className="nav-link collapsed" href="/evaluation">
             <i className="bi bi-calculator" />

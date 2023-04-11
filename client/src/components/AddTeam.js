@@ -44,7 +44,7 @@ export default function AddTeam() {
   };
 
   return (
-    <>
+    <div className="ml-5">
       <GuideNavBar />
       <GuideSideBar />
       <main id="main" className="main">
@@ -64,14 +64,11 @@ export default function AddTeam() {
 
         <section className="section profile">
           <div className="row">
-            <div className="col-xl-12">
+            <div className="col-xl-11">
               <div className="card">
                 <div className="card-body pt-3">
-                  <h3>Enter Team Information</h3>
-                  <br />
-
                   {/* Profile Edit Form */}
-                  <form>
+                  <form className="pl-5 pr-5 pt-3 pb-3">
                     <div className="row mb-3">
                       <label
                         htmlFor="guide_id"
@@ -220,7 +217,7 @@ export default function AddTeam() {
                     <div className="text-center">
                       <button
                         type="submit"
-                        className="btn"
+                        className="btn col-md-8 mt-4"
                         style={{
                           backgroundColor: "#012971",
                           color: "white",
@@ -240,6 +237,6 @@ export default function AddTeam() {
           </div>
         </section>
       </main>
-    </>
+    </div>
   );
 }

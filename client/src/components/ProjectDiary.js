@@ -1,93 +1,110 @@
-import React, { useEffect, useState } from "react";
-import GuideNavBar from "./GuideNavBar";
-import GuideSideBar from "./GuideSideBar";
-import SessionCard from "./SessionCard";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
+import TaskCards from "./TaskCards";
+import StudentSideBar from "./StudentSideBar";
+import StudentNavBar from "./StudentNavBar";
+import DiaryEntryCard from "./DiaryEntryCard";
 
-export default function AddSession() {
-  //session storage to identify the week number
+export default function ProjectDiary() {
+  const [taskNumber, setTaskNumber] = useState("");
   const [sessionNumber, setSessionNumber] = useState("");
-  const [sessionName, setSessionName] = useState("");
-  const [sessionDescription, setSessionDescription] = useState("");
-  const [sessionDate, setSessionDate] = useState("");
+  const [workPlanned, setWorkPlanned] = useState("");
+  const [workCompleted, setWorkCompleted] = useState("");
+  const [entryDate, setEntryDate] = useState("");
   const [status, setStatus] = useState("");
 
-  //getting the session details for the assign session cards
-  const [sessionDetails, setSessionDetails] = useState([]);
-
-  const getSessions = async () => {
-    const sessionResponse = await Axios.get(
-      "http://localhost:3001/getSessions",
-      {
-        params: { task_number: sessionStorage.getItem("WeekNumber") },
-      }
-    );
-    if (sessionResponse.data.length > 0) {
-      setSessionDetails(sessionResponse.data);
-    } else {
-      setSessionDetails(["No Data"]);
-    }
-
-    console.log(sessionResponse.data);
-  };
-
-  useEffect(() => {
-    getSessions();
-  }, []);
-
-  const addSession = (event) => {
+  const makeEntry = (event) => {
     event.preventDefault();
     //console.log("Hello");
-    console.log(sessionNumber, sessionName, sessionDescription, sessionDate);
+    console.log(
+      taskNumber,
+      sessionNumber,
+      workPlanned,
+      workCompleted,
+      entryDate
+    );
 
-    Axios.post("http://localhost:3001/guide/addsession", {
+    Axios.post("http://localhost:3001/makeentry", {
+      task_number: taskNumber,
       session_number: sessionNumber,
-      //retreiving the week number from session storage
-      task_number: sessionStorage.getItem("WeekNumber"),
-      session_name: sessionName,
-      session_description: sessionDescription,
-      date: sessionDate,
+      work_planned: workPlanned,
+      work_completed: workCompleted,
+      entry_date: entryDate,
     })
       .then((response) => {
         //console.log(response);
         setStatus({ type: "success" });
-        getSessions();
       })
       .catch((error) => {
         setStatus({ type: "Error" });
       });
   };
 
+  //getting the project entry details
+  const [entryDetails, setEntryDetails] = useState([]);
+
+  const getEntries = async () => {
+    const entryResponse = await Axios.get("http://localhost:3001/getentries");
+    setEntryDetails(entryResponse.data);
+    console.log(entryResponse.data);
+  };
+
+  useEffect(() => {
+    getEntries();
+  }, []);
+
   return (
-    <div className="ml-5">
-      <GuideNavBar />
-      <GuideSideBar />
+    <>
+      <StudentSideBar />
+      <StudentNavBar />
       <main id="main" className="main">
         <div className="pagetitle">
-          <h1>Add Session</h1>
+          <h1>Project Diary</h1>
         </div>
         {/* End Page Title */}
 
         <section className="section profile">
           <div className="row">
-            <div className="col-xl-11">
+            <div className="col-xl-12">
               <div className="card">
                 <div className="card-body pt-3">
+                  <h3 className="text-center">Make an entry</h3>
+                  <br />
+
                   {/* Profile Edit Form */}
-                  <form className="p-5">
+                  <form>
                     <div className="row mb-3">
+                      <label
+                        htmlFor="week_number"
+                        className="col-md-4 col-lg-3 col-form-label"
+                      >
+                        Week Number
+                      </label>
+                      <div className="col-md-8 col-lg-3">
+                        <input
+                          name="weekNumber"
+                          type="text"
+                          className="form-control"
+                          id="weekNumber"
+                          defaultValue=""
+                          onChange={(e) => {
+                            setTaskNumber(e.target.value);
+                          }}
+                        />
+                      </div>
+
                       <label
                         htmlFor="session_number"
                         className="col-md-4 col-lg-3 col-form-label"
                       >
                         Session Number
                       </label>
-                      <div className="col-md-8 col-lg-9">
+                      <div className="col-md-8 col-lg-3">
                         <input
-                          name="teamNumber"
+                          name="sessionNumber"
                           type="text"
                           className="form-control"
-                          id="teamNumber"
+                          id="sessionNumber"
                           defaultValue=""
                           onChange={(e) => {
                             setSessionNumber(e.target.value);
@@ -98,20 +115,20 @@ export default function AddSession() {
 
                     <div className="row mb-3">
                       <label
-                        htmlFor="teamID"
+                        htmlFor="Work_Planned"
                         className="col-md-4 col-lg-3 col-form-label"
                       >
-                        Session Name
+                        Work Planned
                       </label>
                       <div className="col-md-8 col-lg-9">
-                        <input
-                          name="taskName"
-                          type="text"
+                        <textarea
+                          name="sessionDescription"
                           className="form-control"
-                          id="taskname"
-                          defaultValue=""
+                          id="sessionDescription"
+                          style={{ height: "80px" }}
+                          defaultValue={""}
                           onChange={(e) => {
-                            setSessionName(e.target.value);
+                            setWorkPlanned(e.target.value);
                           }}
                         />
                       </div>
@@ -119,20 +136,20 @@ export default function AddSession() {
 
                     <div className="row mb-3">
                       <label
-                        htmlFor="taskDescription"
+                        htmlFor="Work_Completed"
                         className="col-md-4 col-lg-3 col-form-label"
                       >
-                        Session Description
+                        Work Completed
                       </label>
                       <div className="col-md-8 col-lg-9">
                         <textarea
                           name="sessionDescription"
                           className="form-control"
                           id="sessionDescription"
-                          style={{ height: "100px" }}
+                          style={{ height: "80px" }}
                           defaultValue={""}
                           onChange={(e) => {
-                            setSessionDescription(e.target.value);
+                            setWorkCompleted(e.target.value);
                           }}
                         />
                       </div>
@@ -153,7 +170,7 @@ export default function AddSession() {
                           id="Date"
                           defaultValue=""
                           onChange={(e) => {
-                            setSessionDate(e.target.value);
+                            setEntryDate(e.target.value);
                           }}
                         />
                       </div>
@@ -162,13 +179,13 @@ export default function AddSession() {
                     <div className="text-center">
                       <button
                         type="submit"
-                        className="btn col-md-6"
+                        className="btn col-lg-5 mt-3"
                         style={{ backgroundColor: "#012971", color: "white" }}
                         onClick={(e) => {
-                          addSession(e);
+                          makeEntry(e);
                         }}
                       >
-                        Add Session
+                        Make Entry
                       </button>
                     </div>
                   </form>
@@ -178,24 +195,24 @@ export default function AddSession() {
             </div>
           </div>
         </section>
-
         <div className="pagetitle">
-          <h1>Sessions in Week </h1>
+          <h1>Previous Entries </h1>
         </div>
         <div className="d-flex flex-row gap-5 flex-wrap">
-          {sessionDetails.map((item) => {
+          {entryDetails.map((item) => {
             return (
-              <SessionCard
-                session_number={item.SESSION_NUMBER}
-                guide_id={item.GUIDE_ID}
-                session_name={item.SESSION_NAME}
-                session_description={item.SESSION_DESCRIPTION}
-                date={item.DATE}
+              <DiaryEntryCard
+                username={item.username}
+                tasknumber={item.task_number}
+                sessionnumber={item.session_number}
+                workplanned={item.work_planned}
+                workcompleted={item.work_completed}
+                entrydate={item.entry_date}
               />
             );
           })}
         </div>
       </main>
-    </div>
+    </>
   );
 }

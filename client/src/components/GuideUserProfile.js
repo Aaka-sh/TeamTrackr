@@ -2,37 +2,11 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import GuideNavBar from "./GuideNavBar";
 import GuideSideBar from "./GuideSideBar";
+import { createClient } from "@supabase/supabase-js";
 
 export default function GuideUserProfile() {
   const [guideUserDetails, setGuideUserDetails] = useState([]);
   const [guideDetails, setGuideDetails] = useState([]);
-
-  const loadData = async () => {
-    const guideUserDataResponse = await Axios.get(
-      "http://localhost:3001/guide/userdata"
-    );
-    setGuideUserDetails(guideUserDataResponse.data);
-    //console.log(guideUserDetails);
-  };
-
-  const getGuideData = async () => {
-    const guideDataResponse = await Axios.get(
-      "http://localhost:3001/guide/data"
-    );
-    setGuideDetails(guideDataResponse.data);
-    console.log(guideDetails);
-    //console.log(guideDetails);
-  };
-
-  useEffect(() => {
-    loadData();
-    console.log(guideDetails);
-    //
-  }, []);
-
-  useEffect(() => {
-    getGuideData();
-  }, []);
 
   const [guideName, setGuideName] = useState("");
   const [guideAbout, setGuideAbout] = useState("");
@@ -42,17 +16,57 @@ export default function GuideUserProfile() {
   const [guideGithub, setGuideGithub] = useState("");
   const [status, setStatus] = useState("");
 
+  const supabase = createClient(
+    "https://bucxmapgbqvszyijxeav.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1Y3htYXBnYnF2c3p5aWp4ZWF2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY3OTk5NDExNSwiZXhwIjoxOTk1NTcwMTE1fQ.frpT81qIffE-2x1u0Mh-5q9p0ApL5HKlFnzIKIiCVJI"
+  );
+
+  const loadData = () => {
+    Axios.get("http://localhost:3001/guide/userdata", {}).then((response) => {
+      setGuideUserDetails(response.data);
+      console.log(guideUserDetails);
+    });
+  };
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const getGuideData = async () => {
+    const guideDataResponse = await Axios.get(
+      "http://localhost:3001/guide/data"
+    );
+    setGuideDetails(guideDataResponse.data);
+    setGuideName(guideDetails[0].Guide_Name);
+    setGuideAbout(guideDetails[0].Guide_About);
+    setGuideDepartment(guideDetails[0].Department);
+    setGuidePhone(guideDetails[0].Guide_Phone);
+    setGuideEmail(guideDetails[0].Guide_Email);
+    setGuideGithub(guideDetails[0].Guide_Github);
+    console.log("GuideName: " + guideName);
+    console.log(guideDetails);
+  };
+
+  useEffect(() => {
+    console.log(guideUserDetails);
+    //sessionStorage.guideName = guideUserDetails[0].username;
+    //
+  }, []);
+
+  useEffect(() => {
+    getGuideData();
+  }, []);
+
   const saveGuideDetails = (event) => {
     event.preventDefault();
-    //console.log("Hello");
-    // console.log(
-    //   guideName,
-    //   guideAbout,
-    //   guideDepartment,
-    //   guidePhone,
-    //   guideEmail,
-    //   guideGithub
-    // );
+    console.log("My Details:");
+    console.log(
+      guideName,
+      guideAbout,
+      guideDepartment,
+      guidePhone,
+      guideEmail,
+      guideGithub
+    );
 
     Axios.post("http://localhost:3001/saveGuideDetails", {
       guide_name: guideName,
@@ -71,12 +85,29 @@ export default function GuideUserProfile() {
       });
   };
 
+  //supabase upload function
+  async function upload(event) {
+    console.log(guideUserDetails[0].username);
+    const avatarFile = event.target.files[0];
+    const { data, error } = await supabase.storage
+      .from("userimages")
+      .upload("public/" + guideUserDetails[0].username + ".png", avatarFile, {
+        cacheControl: "3600",
+        upsert: true,
+      });
+    console.log("hello");
+  }
+  const { data, error } = supabase.storage
+    .from("userimages")
+    .getPublicUrl("public/" + sessionStorage.guideName + ".png");
+  console.log(data.publicUrl);
+
   return (
-    <>
+    <div>
       <GuideNavBar />
       <GuideSideBar />
       <main id="main" className="main">
-        <div className="pagetitle">
+        <div className="container pagetitle">
           <h1>Profile</h1>
           <nav>
             <ol className="breadcrumb">
@@ -96,7 +127,7 @@ export default function GuideUserProfile() {
               <div className="card">
                 <div className="card-body profile-card pt-4 d-flex flex-column align-items-center">
                   <img
-                    src="assets/img/profile-img.jpg"
+                    src={data.publicUrl}
                     alt="Profile"
                     className="rounded-circle"
                   />
@@ -148,15 +179,7 @@ export default function GuideUserProfile() {
                         Edit Profile
                       </button>
                     </li>
-                    <li className="nav-item">
-                      <button
-                        className="nav-link"
-                        data-bs-toggle="tab"
-                        data-bs-target="#profile-settings"
-                      >
-                        Settings
-                      </button>
-                    </li>
+
                     <li className="nav-item">
                       <button
                         className="nav-link"
@@ -253,25 +276,19 @@ export default function GuideUserProfile() {
                             Profile Image
                           </label>
                           <div className="col-md-8 col-lg-9">
-                            <img
-                              src="assets/img/profile-img.jpg"
-                              alt="Profile"
-                            />
+                            <img src={data.publicUrl} alt="Profile" />
                             <div className="pt-2">
-                              <a
-                                href="#"
-                                className="btn btn-primary btn-sm"
-                                title="Upload new profile image"
-                              >
-                                <i className="bi bi-upload" />
-                              </a>
-                              <a
-                                href="#"
-                                className="btn btn-danger btn-sm"
-                                title="Remove my profile image"
-                              >
-                                <i className="bi bi-trash" />
-                              </a>
+                              <input
+                                type="file"
+                                className="btn"
+                                style={{
+                                  backgroundColor: "#012971",
+                                  color: "white",
+                                }}
+                                onChange={(e) => {
+                                  upload(e);
+                                }}
+                              />
                             </div>
                           </div>
                         </div>
@@ -289,7 +306,7 @@ export default function GuideUserProfile() {
                               type="text"
                               className="form-control"
                               id="fullName"
-                              defaultValue=""
+                              defaultValue={guideName}
                               onChange={(e) => {
                                 setGuideName(e.target.value);
                               }}
@@ -309,7 +326,7 @@ export default function GuideUserProfile() {
                               className="form-control"
                               id="about"
                               style={{ height: "100px" }}
-                              defaultValue={""}
+                              defaultValue={guideAbout}
                               onChange={(e) => {
                                 setGuideAbout(e.target.value);
                               }}
@@ -329,7 +346,7 @@ export default function GuideUserProfile() {
                               type="text"
                               className="form-control"
                               id="company"
-                              defaultValue=""
+                              defaultValue={guideDepartment}
                               onChange={(e) => {
                                 setGuideDepartment(e.target.value);
                               }}
@@ -349,7 +366,7 @@ export default function GuideUserProfile() {
                               type="text"
                               className="form-control"
                               id="Job"
-                              defaultValue=""
+                              defaultValue={guidePhone}
                               onChange={(e) => {
                                 setGuidePhone(e.target.value);
                               }}
@@ -369,7 +386,7 @@ export default function GuideUserProfile() {
                               type="text"
                               className="form-control"
                               id="Country"
-                              defaultValue=""
+                              defaultValue={guideEmail}
                               onChange={(e) => {
                                 setGuideEmail(e.target.value);
                               }}
@@ -390,7 +407,7 @@ export default function GuideUserProfile() {
                               type="text"
                               className="form-control"
                               id="Linkedin"
-                              defaultValue=""
+                              defaultValue={guideGithub}
                               onChange={(e) => {
                                 setGuideGithub(e.target.value);
                               }}
@@ -400,7 +417,7 @@ export default function GuideUserProfile() {
                         <div className="text-center">
                           <button
                             type="submit"
-                            className="btn"
+                            className="btn w-100"
                             style={{
                               backgroundColor: "#012971",
                               color: "white",
@@ -417,83 +434,7 @@ export default function GuideUserProfile() {
                       </form>
                       {/* End Profile Edit Form */}
                     </div>
-                    <div className="tab-pane fade pt-3" id="profile-settings">
-                      {/* Settings Form */}
-                      <form>
-                        <div className="row mb-3">
-                          <label
-                            htmlFor="fullName"
-                            className="col-md-4 col-lg-3 col-form-label"
-                          >
-                            Email Notifications
-                          </label>
-                          <div className="col-md-8 col-lg-9">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="changesMade"
-                                defaultChecked
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="changesMade"
-                              >
-                                Changes made to your account
-                              </label>
-                            </div>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="newProducts"
-                                defaultChecked
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="newProducts"
-                              >
-                                Information on new products and services
-                              </label>
-                            </div>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="proOffers"
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="proOffers"
-                              >
-                                Marketing and promo offers
-                              </label>
-                            </div>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="securityNotify"
-                                defaultChecked
-                                disabled
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="securityNotify"
-                              >
-                                Security alerts
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-center">
-                          <button type="submit" className="btn btn-primary">
-                            Save Changes
-                          </button>
-                        </div>
-                      </form>
-                      {/* End settings Form */}
-                    </div>
+
                     <div
                       className="tab-pane fade pt-3"
                       id="profile-change-password"
@@ -564,6 +505,6 @@ export default function GuideUserProfile() {
           </div>
         </section>
       </main>
-    </>
+    </div>
   );
 }

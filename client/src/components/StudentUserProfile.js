@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import StudentNavBar from "./StudentNavBar";
 import StudentSideBar from "./StudentSideBar";
+import { createClient } from "@supabase/supabase-js";
 
 export default function StudentUserProfile() {
   const [studentUserDetails, setStudentUserDetails] = useState([]);
@@ -26,6 +27,7 @@ export default function StudentUserProfile() {
 
   useEffect(() => {
     loadData();
+    //sessionStorage.studentName = studentUserDetails[0].username;
     console.log(studentDetails);
     //
   }, []);
@@ -72,6 +74,28 @@ export default function StudentUserProfile() {
       });
   };
 
+  const supabase = createClient(
+    "https://bucxmapgbqvszyijxeav.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1Y3htYXBnYnF2c3p5aWp4ZWF2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY3OTk5NDExNSwiZXhwIjoxOTk1NTcwMTE1fQ.frpT81qIffE-2x1u0Mh-5q9p0ApL5HKlFnzIKIiCVJI"
+  );
+
+  //supabase upload function
+  async function upload(event) {
+    console.log(studentUserDetails[0].username);
+    const avatarFile = event.target.files[0];
+    const { data, error } = await supabase.storage
+      .from("userimages")
+      .upload("public/" + studentUserDetails[0].username + ".png", avatarFile, {
+        cacheControl: "3600",
+        upsert: true,
+      });
+    console.log("hello");
+  }
+  const { data, error } = supabase.storage
+    .from("userimages")
+    .getPublicUrl("public/" + sessionStorage.studentName + ".png");
+  console.log(data.publicUrl);
+
   return (
     <>
       <StudentNavBar />
@@ -97,7 +121,7 @@ export default function StudentUserProfile() {
               <div className="card">
                 <div className="card-body profile-card pt-4 d-flex flex-column align-items-center">
                   <img
-                    src="assets/img/profile-img.jpg"
+                    src={data.publicUrl}
                     alt="Profile"
                     className="rounded-circle"
                   />
@@ -149,15 +173,7 @@ export default function StudentUserProfile() {
                         Edit Profile
                       </button>
                     </li>
-                    <li className="nav-item">
-                      <button
-                        className="nav-link"
-                        data-bs-toggle="tab"
-                        data-bs-target="#profile-settings"
-                      >
-                        Settings
-                      </button>
-                    </li>
+
                     <li className="nav-item">
                       <button
                         className="nav-link"
@@ -256,25 +272,19 @@ export default function StudentUserProfile() {
                             Profile Image
                           </label>
                           <div className="col-md-8 col-lg-9">
-                            <img
-                              src="assets/img/profile-img.jpg"
-                              alt="Profile"
-                            />
+                            <img src={data.publicUrl} alt="Profile" />
                             <div className="pt-2">
-                              <a
-                                href="#"
-                                className="btn btn-primary btn-sm"
-                                title="Upload new profile image"
-                              >
-                                <i className="bi bi-upload" />
-                              </a>
-                              <a
-                                href="#"
-                                className="btn btn-danger btn-sm"
-                                title="Remove my profile image"
-                              >
-                                <i className="bi bi-trash" />
-                              </a>
+                              <input
+                                type="file"
+                                className="btn"
+                                style={{
+                                  backgroundColor: "#012971",
+                                  color: "white",
+                                }}
+                                onChange={(e) => {
+                                  upload(e);
+                                }}
+                              />
                             </div>
                           </div>
                         </div>
@@ -416,83 +426,7 @@ export default function StudentUserProfile() {
                       </form>
                       {/* End Profile Edit Form */}
                     </div>
-                    <div className="tab-pane fade pt-3" id="profile-settings">
-                      {/* Settings Form */}
-                      <form>
-                        <div className="row mb-3">
-                          <label
-                            htmlFor="fullName"
-                            className="col-md-4 col-lg-3 col-form-label"
-                          >
-                            Email Notifications
-                          </label>
-                          <div className="col-md-8 col-lg-9">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="changesMade"
-                                defaultChecked
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="changesMade"
-                              >
-                                Changes made to your account
-                              </label>
-                            </div>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="newProducts"
-                                defaultChecked
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="newProducts"
-                              >
-                                Information on new products and services
-                              </label>
-                            </div>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="proOffers"
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="proOffers"
-                              >
-                                Marketing and promo offers
-                              </label>
-                            </div>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="securityNotify"
-                                defaultChecked
-                                disabled
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="securityNotify"
-                              >
-                                Security alerts
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-center">
-                          <button type="submit" className="btn btn-primary">
-                            Save Changes
-                          </button>
-                        </div>
-                      </form>
-                      {/* End settings Form */}
-                    </div>
+
                     <div
                       className="tab-pane fade pt-3"
                       id="profile-change-password"

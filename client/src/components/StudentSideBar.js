@@ -20,13 +20,7 @@ export default function StudentSideBar() {
             </a>
           </li>
           {/* End Profile Page Nav */}
-          <li className="nav-item">
-            <a className="nav-link collapsed" href="/addteam">
-              <i className="bi bi-person-add" />
-              <span>Add Team</span>
-            </a>
-          </li>
-          {/* End Add Team Nav */}
+
           <li className="nav-item">
             <a className="nav-link collapsed" href="/viewtask">
               <i className="bi bi-list-task" />
@@ -35,9 +29,9 @@ export default function StudentSideBar() {
           </li>
           {/* End Add Tasks Nav */}
           <li className="nav-item">
-            <a className="nav-link collapsed" href="/evaluation">
-              <i className="bi bi-calculator" />
-              <span>Evaluation</span>
+            <a className="nav-link collapsed" href="/projectdiary">
+              <i className="bi bi-journal" />
+              <span>Project Diary</span>
             </a>
           </li>
           {/* End Evaluation Nav */}

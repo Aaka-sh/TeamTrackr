@@ -31,6 +31,9 @@ export default function AssignSessionCard(props) {
             href="/addsession"
             className="btn w-100"
             style={{ backgroundColor: "#012970", color: "white" }}
+            onClick={() => {
+              sessionStorage.setItem("WeekNumber", props.task_number);
+            }}
           >
             Add Session
           </a>

@@ -15,10 +15,10 @@ export default function GuideDashboardMain() {
   }, []);
 
   return (
-    <>
+    <div>
       <main id="main" className="main">
         <div className="pagetitle">
-          <h1>MY TEAMS</h1>
+          <h1>My Teams</h1>
           <nav>
             <ol className="breadcrumb">
               <li className="breadcrumb-item">Details</li>
@@ -43,6 +43,6 @@ export default function GuideDashboardMain() {
           })}
         </div>
       </main>
-    </>
+    </div>
   );
 }

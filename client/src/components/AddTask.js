@@ -12,6 +12,19 @@ export default function AddTask() {
   const [endDate, setEndDate] = useState("");
   const [status, setStatus] = useState("");
 
+  //getting the task details for the assign session cards
+  const [taskDetails, setTaskDetails] = useState([]);
+
+  const getTasks = async () => {
+    const taskResponse = await Axios.get("http://localhost:3001/getTasks");
+    setTaskDetails(taskResponse.data);
+    console.log(taskResponse.data);
+  };
+
+  useEffect(() => {
+    getTasks();
+  }, []);
+
   const addTask = (event) => {
     event.preventDefault();
     //console.log("Hello");
@@ -34,47 +47,18 @@ export default function AddTask() {
       .then((response) => {
         //console.log(response);
         setStatus({ type: "success" });
+        getTasks();
       })
       .catch((error) => {
         setStatus({ type: "Error" });
       });
   };
 
-  //getting the task details for the assign session cards
-  const [taskDetails, setTaskDetails] = useState([]);
-
-  const getTasks = async () => {
-    const taskResponse = await Axios.get("http://localhost:3001/getTasks");
-    setTaskDetails(taskResponse.data);
-    console.log(taskResponse.data);
-  };
-
-  useEffect(() => {
-    getTasks();
-  }, []);
-
   return (
-    <>
+    <div className="ml-5">
       <GuideNavBar />
       <GuideSideBar />
       <main id="main" className="main">
-        <div className="pagetitle">
-          <h1>Assigned Tasks</h1>
-        </div>
-        <div className="d-flex flex-row gap-5 flex-wrap">
-          {taskDetails.map((item) => {
-            return (
-              <AssignSessionCard
-                task_number={item.task_number}
-                guide_id={item.guide_id}
-                task_name={item.task_name}
-                task_description={item.task_description}
-                start_date={item.start_date}
-                end_date={item.end_date}
-              />
-            );
-          })}
-        </div>
         <div className="pagetitle">
           <h1>Add Tasks</h1>
           <nav>
@@ -91,18 +75,14 @@ export default function AddTask() {
 
         <section className="section profile">
           <div className="row">
-            <div className="col-xl-12">
+            <div className="col-xl-11">
               <div className="card">
-                <div className="card-body pt-3">
-                  <h3>Enter Task Information</h3>
-                  <br />
-
-                  {/* Profile Edit Form */}
-                  <form>
+                <div className="card-body pt-5 pb-5">
+                  <form className="pl-5">
                     <div className="row mb-3">
                       <label
                         htmlFor="guide_id"
-                        className="col-md-4 col-lg-3 col-form-label"
+                        className="col-md-4 col-lg-2 col-form-label"
                       >
                         Task Number
                       </label>
@@ -123,7 +103,7 @@ export default function AddTask() {
                     <div className="row mb-3">
                       <label
                         htmlFor="teamID"
-                        className="col-md-4 col-lg-3 col-form-label"
+                        className="col-md-4 col-lg-2 col-form-label"
                       >
                         Task Name
                       </label>
@@ -144,7 +124,7 @@ export default function AddTask() {
                     <div className="row mb-3">
                       <label
                         htmlFor="taskDescription"
-                        className="col-md-4 col-lg-3 col-form-label"
+                        className="col-md-4 col-lg-2 col-form-label"
                       >
                         Task description
                       </label>
@@ -165,11 +145,11 @@ export default function AddTask() {
                     <div className="row mb-3">
                       <label
                         htmlFor="startDate"
-                        className="col-md-4 col-lg-3 col-form-label"
+                        className="col-md-4 col-lg-2 col-form-label"
                       >
                         Start Date
                       </label>
-                      <div className="col-md-8 col-lg-9">
+                      <div className="col-md-6 col-lg-3">
                         <input
                           name="startDate"
                           type="date"
@@ -181,15 +161,14 @@ export default function AddTask() {
                           }}
                         />
                       </div>
-                    </div>
-                    <div className="row mb-3">
+
                       <label
                         htmlFor="endDate"
                         className="col-md-4 col-lg-3 col-form-label"
                       >
                         End Date
                       </label>
-                      <div className="col-md-8 col-lg-9">
+                      <div className="col-md-8 col-lg-3">
                         <input
                           name="endDate"
                           type="date"
@@ -202,11 +181,12 @@ export default function AddTask() {
                         />
                       </div>
                     </div>
+                    <div className="row mb-3"></div>
 
                     <div className="text-center">
                       <button
                         type="submit"
-                        className="btn"
+                        className="btn col-lg-8 mt-4"
                         style={{ backgroundColor: "#012971", color: "white" }}
                         onClick={(e) => {
                           addTask(e);
@@ -222,7 +202,25 @@ export default function AddTask() {
             </div>
           </div>
         </section>
+
+        <div className="pagetitle mt-4">
+          <h1>Assigned Tasks</h1>
+        </div>
+        <div className="d-flex flex-row gap-5 flex-wrap">
+          {taskDetails.map((item) => {
+            return (
+              <AssignSessionCard
+                task_number={item.task_number}
+                guide_id={item.guide_id}
+                task_name={item.task_name}
+                task_description={item.task_description}
+                start_date={item.start_date}
+                end_date={item.end_date}
+              />
+            );
+          })}
+        </div>
       </main>
-    </>
+    </div>
   );
 }

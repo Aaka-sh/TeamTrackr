@@ -5,14 +5,17 @@ export default function Navbar() {
       id="header"
       className="header fixed-top d-flex align-items-center mx-auto"
     >
-      <div className="d-flex align-items-center justify-content-between">
+      <div
+        className="d-flex align-items-center justify-content-between"
+        style={{ marginRight: "auto" }}
+      >
         <a href="index.html" className="logo d-flex align-items-center">
           <img src="assets/img/logo.png" alt="" />
           <span className="d-none d-lg-block">TeamTrackr</span>
         </a>
       </div>
       {/* End Logo */}
-      <div id="navbar" className="navbar">
+      <div id="navbar" className="navbar" style={{ marginRight: "20px" }}>
         <ul>
           <li>
             <a className="nav-link scrollto" href="/login">

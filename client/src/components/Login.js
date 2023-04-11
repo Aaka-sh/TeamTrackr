@@ -19,8 +19,10 @@ export default function Login() {
       console.log(response);
       if (response.data[0].userrole == "Project Guide") {
         navigate("/guidedashboard");
+        sessionStorage.guideName = response.data[0].username;
       } else if (response.data[0].userrole == "Student") {
         navigate("/studentdashboard");
+        sessionStorage.studentName = response.data[0].username;
       } else if (response.data === "IncorrectPassword") {
         console.log("Incorrect password");
       } else {
@@ -69,6 +71,7 @@ export default function Login() {
                               name="username"
                               className="form-control"
                               id="yourUsername"
+                              placeholder="G-1001/S-1001"
                               required
                               onChange={(e) => setUsername(e.target.value)}
                             />
@@ -93,26 +96,10 @@ export default function Login() {
                             Please enter your password!
                           </div>
                         </div>
-                        <div className="col-12">
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              name="remember"
-                              defaultValue="true"
-                              id="rememberMe"
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="rememberMe"
-                            >
-                              Remember me
-                            </label>
-                          </div>
-                        </div>
+
                         <div className="col-12">
                           <button
-                            className="btn w-100"
+                            className="btn w-100 mt-3"
                             type="button"
                             style={{
                               backgroundColor: "#012970",

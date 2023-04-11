@@ -2,24 +2,10 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import GuideNavBar from "./GuideNavBar";
 import GuideSideBar from "./GuideSideBar";
-import ProjectDiaryCard from "./ProjectDiaryCard";
-import NameCards from "./NameCards";
+import ProgressNameCard from "./ProgressNameCard";
 
-export default function Evalution() {
-  const [entryDetails, setEntryDetails] = useState([]);
+export default function ViewProgress() {
   const [studentNames, setStudentNames] = useState([]);
-
-  const getEntries = async () => {
-    const entryResponse = await Axios.get(
-      "http://localhost:3001/projectDiaryEntry"
-    );
-    setEntryDetails(entryResponse.data);
-    console.log(entryResponse.data);
-  };
-
-  useEffect(() => {
-    getEntries();
-  }, []);
 
   const getNames = async () => {
     const nameResponse = await Axios.get(
@@ -32,6 +18,7 @@ export default function Evalution() {
   useEffect(() => {
     getNames();
   }, []);
+
   return (
     <div>
       <GuideNavBar />
@@ -44,7 +31,7 @@ export default function Evalution() {
           <div className="d-flex flex-row gap-4 flex-wrap">
             {studentNames.map((item) => {
               return (
-                <NameCards
+                <ProgressNameCard
                   student_id={item.Student_ID}
                   student_name={item.Student_Name}
                 />

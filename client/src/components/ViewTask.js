@@ -23,7 +23,7 @@ export default function ViewTask() {
       <StudentNavBar />
       <main id="main" className="main">
         <div className="pagetitle">
-          <h1>Tasks</h1>
+          <h1>Assigned Tasks</h1>
           <nav>
             <ol className="breadcrumb">
               <li className="breadcrumb-item">Details</li>
