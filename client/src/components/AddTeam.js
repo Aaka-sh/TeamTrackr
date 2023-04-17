@@ -53,7 +53,7 @@ export default function AddTeam() {
           <nav>
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="index.html">Home</a>
+                <a href="/guidedashboard">Home</a>
               </li>
 
               <li className="breadcrumb-item active">Add Teams</li>

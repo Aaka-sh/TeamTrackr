@@ -2,31 +2,27 @@ import React, { useEffect, useState } from "react";
 import GuideNavBar from "./GuideNavBar";
 import GuideSideBar from "./GuideSideBar";
 import SessionCard from "./SessionCard";
+import WeekCard from "./WeekCard";
 import Axios from "axios";
 import ProjectDiaryCard from "./ProjectDiaryCard";
 
 export default function Submissions() {
-  //getting the session details for the assign session cards
-  const [submissionDetails, setSubmissionDetails] = useState([]);
+  //getting the week details
+  const [weekDetails, setWeekDetails] = useState([]);
 
-  const getSubmissions = async () => {
-    const submissionResponse = await Axios.get(
-      "http://localhost:3001/getStudentSubmissions",
-      {
-        params: { id: sessionStorage.getItem("StudentCardID") },
-      }
-    );
-    if (submissionResponse.data.length > 0) {
-      setSubmissionDetails(submissionResponse.data);
+  const getWeeks = async () => {
+    const weekResponse = await Axios.get("http://localhost:3001/getWeeks");
+    if (weekResponse.data.length > 0) {
+      setWeekDetails(weekResponse.data);
     } else {
-      setSubmissionDetails(["No Data"]);
+      setWeekDetails(["No Data"]);
     }
     //console.log("Card for " + sessionStorage.getItem("StudentCardID"));
-    console.log(submissionResponse.data);
+    console.log(weekResponse.data);
   };
 
   useEffect(() => {
-    getSubmissions();
+    getWeeks();
   }, []);
 
   return (
@@ -35,20 +31,11 @@ export default function Submissions() {
       <GuideSideBar />
       <main id="main" className="main">
         <div className="pagetitle">
-          <h1>Submissions </h1>
+          <h1>Weeks </h1>
         </div>
         <div className="d-flex flex-row gap-4 flex-wrap">
-          {submissionDetails.map((item) => {
-            return (
-              <ProjectDiaryCard
-                username={item.username}
-                task_number={item.task_number}
-                session_number={item.session_number}
-                work_planned={item.work_planned}
-                work_completed={item.work_completed}
-                entry_date={item.entry_date}
-              />
-            );
+          {weekDetails.map((item) => {
+            return <WeekCard week_number={item.task_number} />;
           })}
         </div>
       </main>

@@ -20,6 +20,7 @@ import ViewSession from "./components/ViewSession";
 import ViewProgress from "./components/ViewProgress";
 import Submissions from "./components/Submissions";
 import EvaluationForm from "./components/EvaluationForm";
+import ViewDiaryEntries from "./components/ViewDiaryEntries";
 
 export default function App() {
   return (
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="/viewsubmissions" element={<Submissions />} />
 
           <Route path="/evaluatestudent" element={<EvaluationForm />} />
+          <Route path="/viewdiaryentries" element={<ViewDiaryEntries />} />
         </Routes>
       </Router>
     </>

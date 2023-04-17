@@ -112,9 +112,9 @@ export default function GuideUserProfile() {
           <nav>
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="index.html">Home</a>
+                <a href="/guidedashboard">Home</a>
               </li>
-              <li className="breadcrumb-item">Users</li>
+
               <li className="breadcrumb-item active">Profile</li>
             </ol>
           </nav>

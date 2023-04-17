@@ -29,6 +29,7 @@ export default function StudentNavBar() {
   }, []);
 
   const logout = () => {
+    sessionStorage.clear();
     Axios.get("http://localhost:3001/logout").then((res) => {
       if (res.data === "success") {
         navigate("/login");

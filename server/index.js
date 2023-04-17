@@ -392,7 +392,161 @@ app.get("/getStudentNames", (req, res) => {
 app.get("/getStudentSubmissions", (req, res) => {
   console.log("Hi" + req.query.id);
   const sqlGet =
-    "SELECT * FROM project_diary where username = '" + req.query.id + "'";
+    "SELECT * FROM project_diary where username = '" +
+    req.query.id +
+    "' and task_number = '" +
+    req.query.week +
+    "'";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//upsert the marks for project overview
+app.post("/guide/updatePOMarks", (req, res) => {
+  const { id, category, marks } = req.body;
+  console.log(req.body);
+  var fields = [id, category, marks, marks];
+  var sqlQuery =
+    "INSERT INTO MARKS (USERNAME, CATEGORY, MARKS) VALUES(?,?,?) ON DUPLICATE KEY UPDATE MARKS = ?";
+  db.execute(sqlQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
+//upsert the marks for requirement specifications
+app.post("/guide/updateRSMarks", (req, res) => {
+  const { id, category, marks } = req.body;
+  console.log(req.body);
+  var fields = [id, category, marks, marks];
+  var sqlQuery =
+    "INSERT INTO MARKS (USERNAME, CATEGORY, MARKS) VALUES(?,?,?) ON DUPLICATE KEY UPDATE MARKS = ?";
+  db.execute(sqlQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
+//upsert the marks for detailed design
+app.post("/guide/updateDDMarks", (req, res) => {
+  const { id, category, marks } = req.body;
+  console.log(req.body);
+  var fields = [id, category, marks, marks];
+  var sqlQuery =
+    "INSERT INTO MARKS (USERNAME, CATEGORY, MARKS) VALUES(?,?,?) ON DUPLICATE KEY UPDATE MARKS = ?";
+  db.execute(sqlQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
+//upsert the marks for Construction
+app.post("/guide/updateCMarks", (req, res) => {
+  const { id, category, marks } = req.body;
+  console.log(req.body);
+  var fields = [id, category, marks, marks];
+  var sqlQuery =
+    "INSERT INTO MARKS (USERNAME, CATEGORY, MARKS) VALUES(?,?,?) ON DUPLICATE KEY UPDATE MARKS = ?";
+  db.execute(sqlQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
+//upsert the marks for component testing
+app.post("/guide/updateCTMarks", (req, res) => {
+  const { id, category, marks } = req.body;
+  console.log(req.body);
+  var fields = [id, category, marks, marks];
+  var sqlQuery =
+    "INSERT INTO MARKS (USERNAME, CATEGORY, MARKS) VALUES(?,?,?) ON DUPLICATE KEY UPDATE MARKS = ?";
+  db.execute(sqlQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
+//upsert the marks for requirement specifications
+app.post("/guide/updateDMarks", (req, res) => {
+  const { id, category, marks } = req.body;
+  console.log(req.body);
+  var fields = [id, category, marks, marks];
+  var sqlQuery =
+    "INSERT INTO MARKS (USERNAME, CATEGORY, MARKS) VALUES(?,?,?) ON DUPLICATE KEY UPDATE MARKS = ?";
+  db.execute(sqlQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
+//upsert the marks for alumni evaluation marks
+app.post("/guide/updateAEMarks", (req, res) => {
+  const { id, category, marks } = req.body;
+  console.log(req.body);
+  var fields = [id, category, marks, marks];
+  var sqlQuery =
+    "INSERT INTO MARKS (USERNAME, CATEGORY, MARKS) VALUES(?,?,?) ON DUPLICATE KEY UPDATE MARKS = ?";
+  db.execute(sqlQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
+//upsert the marks for Department Panel
+app.post("/guide/updateDPMarks", (req, res) => {
+  const { id, category, marks } = req.body;
+  console.log(req.body);
+  var fields = [id, category, marks, marks];
+  var sqlQuery =
+    "INSERT INTO MARKS (USERNAME, CATEGORY, MARKS) VALUES(?,?,?) ON DUPLICATE KEY UPDATE MARKS = ?";
+  db.execute(sqlQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
+//upsert the marks for Department Panel
+app.post("/givefeedback", (req, res) => {
+  const {
+    week_number,
+    session_number,
+    work_planned,
+    work_completed,
+    date,
+    feedback,
+  } = req.body;
+  console.log(req.body);
+  var fields = [
+    week_number,
+    session_number,
+    work_planned,
+    work_completed,
+    date,
+    feedback,
+    feedback,
+  ];
+  var sqlQuery =
+    "INSERT INTO FEEDBACK (week_number, session_number, work_planned, work_completed, entry_date, feedback) VALUES(?,?,?,?,?,?) ON DUPLICATE KEY UPDATE feedback = ?";
+  db.execute(sqlQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
+  });
+});
+
+//getting marks for a particular student
+app.get("/getMarks", (req, res) => {
+  const sqlGet = "SELECT * FROM MARKS where username = '" + req.query.id + "'";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//getting weeks
+app.get("/getWeeks", (req, res) => {
+  const sqlGet = "SELECT * FROM tasks";
   db.query(sqlGet, (error, result) => {
     res.send(result);
     console.log(result);

@@ -1,25 +1,24 @@
 import React from "react";
+import { createClient } from "@supabase/supabase-js";
 
-export default function NameCard(props) {
-  //console.log(props);
+export default function WeekCard(props) {
   return (
     <div className="card col-lg-3">
       <div className="card-body">
         <div className="card-body mt-3">
-          <h5 className="card-title">
-            {props.student_id}: {props.student_name}
-          </h5>
+          <h5 className="card-title">Week Number: {props.week_number}</h5>
         </div>
+
         <div className="text-center">
           <a
-            href="/evaluatestudent"
-            className="btn w-100 mt-1"
+            href="/viewdiaryentries"
+            className="btn w-100 mt-2"
             style={{ backgroundColor: "#012970", color: "white" }}
             onClick={() => {
-              sessionStorage.setItem("StudentCardID", props.student_id);
+              sessionStorage.setItem("GuideWeekNumber", props.week_number);
             }}
           >
-            Evaluate
+            View Progress
           </a>
         </div>
       </div>

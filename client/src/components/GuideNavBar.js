@@ -14,6 +14,7 @@ export default function GuideNavBar() {
   }, []);
 
   const logout = () => {
+    sessionStorage.clear();
     Axios.get("http://localhost:3001/logout").then((res) => {
       if (res.data === "success") {
         navigate("/login");
@@ -71,24 +72,7 @@ export default function GuideNavBar() {
           <i className="bi bi-list toggle-sidebar-btn" />
         </div>
         {/* End Logo */}
-        <div className="search-bar">
-          <form
-            className="search-form d-flex align-items-center"
-            method="POST"
-            action="#"
-          >
-            <input
-              type="text"
-              name="query"
-              placeholder="Search"
-              title="Enter search keyword"
-            />
-            <button type="submit" title="Search">
-              <i className="bi bi-search" />
-            </button>
-          </form>
-        </div>
-        {/* End Search Bar */}
+
         <nav className="header-nav ms-auto">
           <ul className="d-flex align-items-center">
             <li className="nav-item dropdown pe-3">
