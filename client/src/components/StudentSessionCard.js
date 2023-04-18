@@ -1,6 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Axios from "axios";
 
 export default function StudentSessionCard(props) {
+  const [feedbackDetails, setFeedbackDetails] = useState([]);
+  const getFeedback = async () => {
+    const feedbackResponse = await Axios.get(
+      "http://localhost:3001/getFeedback",
+      {
+        params: {
+          week_number: sessionStorage.getItem("StudentWeekNumber"),
+          session_number: props.session_number,
+          student: sessionStorage.getItem("studentName"),
+        },
+      }
+    );
+    setFeedbackDetails(feedbackResponse.data);
+    console.log(feedbackResponse.data);
+  };
+
+  useEffect(() => {
+    getFeedback();
+  }, []);
+
   return (
     <div className="card col-lg-5">
       <div className="card-body">
@@ -22,6 +43,17 @@ export default function StudentSessionCard(props) {
             </tr>
           </tbody>
         </table>
+
+        {feedbackDetails.map((item) => {
+          return (
+            <div>
+              <p>
+                <b>Feedback: </b>
+                {item.feedback}
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -18,6 +18,11 @@ export default function Navbar() {
       <div id="navbar" className="navbar" style={{ marginRight: "20px" }}>
         <ul>
           <li>
+            <a className="nav-link scrollto" href="/adminlogin">
+              Admin Login
+            </a>
+          </li>
+          <li>
             <a className="nav-link scrollto" href="/login">
               Login
             </a>

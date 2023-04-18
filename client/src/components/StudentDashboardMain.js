@@ -26,9 +26,9 @@ export default function StudentDashboardMain() {
     console.log(guideResponse.data);
   };
 
-  // useEffect(() => {
-  //   getGuideForStudent();
-  // }, []);
+  useEffect(() => {
+    getGuideForStudent();
+  }, []);
 
   return (
     <>

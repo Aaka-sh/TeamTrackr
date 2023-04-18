@@ -21,6 +21,11 @@ import ViewProgress from "./components/ViewProgress";
 import Submissions from "./components/Submissions";
 import EvaluationForm from "./components/EvaluationForm";
 import ViewDiaryEntries from "./components/ViewDiaryEntries";
+import AdminLogin from "./components/AdminLogin";
+import AdminDashboard from "./components/AdminDashboard";
+import AdminManageUser from "./components/AdminManageUser";
+import ContactAdmin from "./components/ContactAdmin";
+import AdminMessages from "./components/AdminMessages";
 
 export default function App() {
   return (
@@ -30,6 +35,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/AdminDashboard" element={<AdminDashboard />} />
           <Route path="/guidedashboard" element={<GuideDashboard />} />
           <Route path="/guideuserprofile" element={<GuideUserProfile />} />
           <Route path="/studentdashboard" element={<StudentDashboard />} />
@@ -43,9 +49,12 @@ export default function App() {
           <Route path="/viewsession" element={<ViewSession />} />
           <Route path="/viewprogress" element={<ViewProgress />} />
           <Route path="/viewsubmissions" element={<Submissions />} />
-
           <Route path="/evaluatestudent" element={<EvaluationForm />} />
           <Route path="/viewdiaryentries" element={<ViewDiaryEntries />} />
+          <Route path="/contactadmin" element={<ContactAdmin />} />
+          <Route path="/adminmanageuser" element={<AdminManageUser />} />
+          <Route path="/adminlogin" element={<AdminLogin />} />
+          <Route path="/adminmessage/:id" element={<AdminMessages />} />
         </Routes>
       </Router>
     </>

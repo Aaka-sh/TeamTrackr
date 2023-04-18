@@ -40,7 +40,6 @@ export default function ProjectDiary() {
       });
   };
 
-  //getting the project entry details
   const [entryDetails, setEntryDetails] = useState([]);
 
   const getEntries = async () => {
@@ -52,6 +51,56 @@ export default function ProjectDiary() {
   useEffect(() => {
     getEntries();
   }, []);
+
+  const checkweek = (value) => {
+    const error = document.getElementById("weekerror");
+    var numbers = /^[0-9]+$/;
+    if (value === null || value === "") {
+      error.innerHTML =
+        "<span style='color: red'>Error: Week can not be empty</span>";
+      document.getElementById("weekerror").disabled = true;
+    } else if (value <= 12 && value >= 0) {
+      error.innerHTML = "";
+      document.getElementById("weekerror").disabled = false;
+    } else if (value < 0) {
+      error.innerHTML =
+        "<span style='color: red'>Error: Marks can not be less than zero</span>";
+      document.getElementById("weekerror").disabled = true;
+    } else if (value > 12) {
+      error.innerHTML =
+        "<span style='color: red'>Error: Marks can not be more than 12</span>";
+      document.getElementById("weekerror").disabled = true;
+    } else if (!value.match(numbers)) {
+      error.innerHTML =
+        "<span style='color: red'>Error: No characters allowed</span>";
+      document.getElementById("weekerror").disabled = true;
+    }
+  };
+
+  const checksession = (value) => {
+    const error = document.getElementById("sessionerror");
+    var numbers = /^[0-9]+$/;
+    if (value === null || value === "") {
+      error.innerHTML =
+        "<span style='color: red'>Error: Week can not be empty</span>";
+      document.getElementById("sessionerror").disabled = true;
+    } else if (value <= 7 && value >= 0) {
+      error.innerHTML = "";
+      document.getElementById("sessionerror").disabled = false;
+    } else if (value < 0) {
+      error.innerHTML =
+        "<span style='color: red'>Error: Marks can not be less than zero</span>";
+      document.getElementById("sessionerror").disabled = true;
+    } else if (value > 7) {
+      error.innerHTML =
+        "<span style='color: red'>Error: Marks can not be more than 7</span>";
+      document.getElementById("sessionerror").disabled = true;
+    } else if (!value.match(numbers)) {
+      error.innerHTML =
+        "<span style='color: red'>Error: No characters allowed</span>";
+      document.getElementById("sessionerror").disabled = true;
+    }
+  };
 
   return (
     <>
@@ -65,9 +114,9 @@ export default function ProjectDiary() {
 
         <section className="section profile">
           <div className="row">
-            <div className="col-xl-12">
+            <div className="col-xl-11">
               <div className="card">
-                <div className="card-body pt-3">
+                <div className="card-body pl-5 pr-5 pt-4 pb-4">
                   <h3 className="text-center">Make an entry</h3>
                   <br />
 
@@ -89,8 +138,12 @@ export default function ProjectDiary() {
                           defaultValue=""
                           onChange={(e) => {
                             setTaskNumber(e.target.value);
+                            checkweek(e.target.value);
                           }}
                         />
+                        <div className="mt-3 w-100">
+                          <p id="weekerror"></p>
+                        </div>
                       </div>
 
                       <label

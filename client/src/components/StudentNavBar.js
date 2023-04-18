@@ -65,7 +65,6 @@ export default function StudentNavBar() {
           <img src="assets/img/logo.png" alt="" />
           <span className="d-none d-lg-block">TeamTrackr</span>
         </a>
-        <i className="bi bi-list toggle-sidebar-btn" />
       </div>
       {/* End Logo */}
 

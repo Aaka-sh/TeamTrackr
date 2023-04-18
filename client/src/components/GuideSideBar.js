@@ -47,6 +47,13 @@ export default function GuideSideBar() {
             <span>Evaluation</span>
           </a>
         </li>
+
+        <li className="nav-item">
+          <a className="nav-link collapsed" href="/contactadmin">
+            <i className="bi bi-calculator" />
+            <span>Contact Admin</span>
+          </a>
+        </li>
         {/* End Evaluation Nav */}
       </ul>
     </aside>

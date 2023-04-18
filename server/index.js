@@ -137,6 +137,7 @@ app.post("/saveStudentDetails", (req, res) => {
   const {
     student_name,
     student_about,
+    student_guide,
     department,
     student_phone,
     student_email,
@@ -151,10 +152,11 @@ app.post("/saveStudentDetails", (req, res) => {
     student_phone,
     student_email,
     student_github,
+    student_guide,
     sessions.username,
   ];
   var updateQuery =
-    "UPDATE student SET student_name = ?, student_about = ?, department=?, student_phone = ?, student_email = ?, student_github = ? where student_id =  ?";
+    "UPDATE student SET student_name = ?, student_about = ?, department=?, student_phone = ?, student_email = ?, student_github = ?, guide = ? where student_id =  ?";
 
   db.execute(updateQuery, fields, (err, result) => {
     console.log(err);
@@ -188,13 +190,9 @@ app.get("/student/data", (req, res) => {
 app.get("/guideforstudent", (req, res) => {
   console.log(sessions.username);
   const sqlGet =
-    "select * from guide where guide_id = (select guide_id from team where member1 = (select student_name from student where student_id = '" +
+    "select * from student inner join guide on student.guide = guide.guide_id where student_id = '" +
     sessions.username +
-    "') or member2 = (select student_name from student where student_id = '" +
-    sessions.username +
-    "') or member3 = (select student_name from student where student_id = '" +
-    sessions.username +
-    "'))";
+    "'";
 
   db.execute(sqlGet, (error, result) => {
     res.send(result);
@@ -516,9 +514,11 @@ app.post("/givefeedback", (req, res) => {
     work_completed,
     date,
     feedback,
+    student_id,
   } = req.body;
   console.log(req.body);
   var fields = [
+    student_id,
     week_number,
     session_number,
     work_planned,
@@ -528,10 +528,25 @@ app.post("/givefeedback", (req, res) => {
     feedback,
   ];
   var sqlQuery =
-    "INSERT INTO FEEDBACK (week_number, session_number, work_planned, work_completed, entry_date, feedback) VALUES(?,?,?,?,?,?) ON DUPLICATE KEY UPDATE feedback = ?";
+    "INSERT INTO FEEDBACK (student, week_number, session_number, work_planned, work_completed, entry_date, feedback ) VALUES(?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE feedback = ?";
   db.execute(sqlQuery, fields, (err, result) => {
     console.log(err);
     res.send(result);
+  });
+});
+//getFeedback
+app.get("/getFeedback", (req, res) => {
+  const sqlGet =
+    "SELECT * FROM FEEDBACK where week_number = " +
+    req.query.week_number +
+    " and session_number = " +
+    req.query.session_number +
+    " and student = '" +
+    req.query.student +
+    "'";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
   });
 });
 
@@ -540,7 +555,7 @@ app.get("/getMarks", (req, res) => {
   const sqlGet = "SELECT * FROM MARKS where username = '" + req.query.id + "'";
   db.query(sqlGet, (error, result) => {
     res.send(result);
-    console.log(result);
+    //console.log(result);
   });
 });
 
@@ -550,6 +565,95 @@ app.get("/getWeeks", (req, res) => {
   db.query(sqlGet, (error, result) => {
     res.send(result);
     console.log(result);
+  });
+});
+
+//Admin login
+app.post("/adminlogin", function (req, res) {
+  //console.log(1 + req.body);
+  let { username, password } = req.body;
+
+  let selectSQl = "SELECT * FROM `admin` WHERE `username` = '" + username + "'";
+
+  db.query(selectSQl, (err, rows) => {
+    if (err) throw err;
+    console.log(rows[0]);
+    if (rows.length > 0) {
+      if (rows[0].PASSWORD === password) {
+        //session = req.session;
+        sessions.username = username;
+        console.log("1" + sessions.username);
+
+        res.send("Success");
+        console.log("success");
+      } else {
+        res.send("IncorrectPassword");
+      }
+    } else {
+      res.send("Invalid Username");
+    }
+  });
+});
+
+//get admin data
+app.get("/getadmindata", (req, res) => {
+  const sqlGet = "SELECT * FROM ADMIN";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//get messages
+app.get("/getmessage", (req, res) => {
+  const sqlGet = "SELECT * FROM MESSAGES";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//get guide data for admin dashboard
+app.get("/getguidedata", (req, res) => {
+  const sqlGet = "SELECT * FROM GUIDE where guide_id like 'G-%'";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//get student data for admin dashboard
+app.get("/getstudentdata", (req, res) => {
+  const sqlGet = "SELECT * FROM STUDENT where student_id like 'S-%'";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//show messages to admin
+app.get("/getmessage-des", (req, res) => {
+  let { id } = req.query;
+  console.log(id);
+  const sqlGet = "SELECT * FROM MESSAGES where NAME = '" + id + "' ";
+  db.query(sqlGet, (error, result) => {
+    res.send(result);
+    console.log(result);
+  });
+});
+
+//message admin
+app.post("/addmessage", (req, res) => {
+  const { Name, Issue, Description } = req.body;
+  console.log(req.body);
+  const fields = [Name, Issue, Description];
+  console.log(fields);
+  const insertQuery =
+    "Insert into Messages(Name, Issue, Description) values(?,?,?)";
+
+  db.execute(insertQuery, fields, (err, result) => {
+    console.log(err);
+    res.send(result);
   });
 });
 

@@ -34,12 +34,7 @@ export default function ViewSession() {
       <StudentNavBar />
       <main id="main" className="main">
         <div className="pagetitle">
-          <h1>
-            Sessions in Week:{" "}
-            {sessionDetails.map((item) => {
-              return <>{item.TASK_NUMBER}</>;
-            })}{" "}
-          </h1>
+          <h1>Sessions in Week</h1>
           <nav>
             <ol className="breadcrumb">
               <li className="breadcrumb-item">Details</li>

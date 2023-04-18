@@ -16,22 +16,12 @@ export default function EvaluationForm() {
   const [panelDemonstrationMarks, setPanelDemonstrationMarks] = useState();
   const [status, setStatus] = useState();
 
-  //getting the marks details for a particular student
-  const [marksDetails, setMarksDetails] = useState([]);
-  const getMarks = async () => {
-    const marksResponse = await Axios.get("http://localhost:3001/getMarks", {
-      params: { id: sessionStorage.getItem("StudentCardID") },
-    });
-    setMarksDetails(marksResponse.data);
-    console.log(marksResponse.data);
-  };
-  useEffect(() => {
-    getMarks();
-  }, []);
-
   const POMarks = (event) => {
     event.preventDefault();
     console.log(projectOverviewMarks);
+    console.log("ID " + sessionStorage.getItem("StudentCardID"));
+    console.log("Marks " + projectOverviewMarks);
+
     Axios.post("http://localhost:3001/guide/updatePOMarks", {
       id: sessionStorage.getItem("StudentCardID"),
       category: "Project Overview",
@@ -39,6 +29,7 @@ export default function EvaluationForm() {
     })
       .then((response) => {
         setStatus({ type: "success" });
+        getMarks();
       })
       .catch((error) => {
         setStatus({ type: "Error" });
@@ -55,6 +46,7 @@ export default function EvaluationForm() {
     })
       .then((response) => {
         setStatus({ type: "success" });
+        getMarks();
       })
       .catch((error) => {
         setStatus({ type: "Error" });
@@ -71,6 +63,7 @@ export default function EvaluationForm() {
     })
       .then((response) => {
         setStatus({ type: "success" });
+        getMarks();
       })
       .catch((error) => {
         setStatus({ type: "Error" });
@@ -87,6 +80,7 @@ export default function EvaluationForm() {
     })
       .then((response) => {
         setStatus({ type: "success" });
+        getMarks();
       })
       .catch((error) => {
         setStatus({ type: "Error" });
@@ -103,6 +97,7 @@ export default function EvaluationForm() {
     })
       .then((response) => {
         setStatus({ type: "success" });
+        getMarks();
       })
       .catch((error) => {
         setStatus({ type: "Error" });
@@ -119,6 +114,7 @@ export default function EvaluationForm() {
     })
       .then((response) => {
         setStatus({ type: "success" });
+        getMarks();
       })
       .catch((error) => {
         setStatus({ type: "Error" });
@@ -136,6 +132,7 @@ export default function EvaluationForm() {
     })
       .then((response) => {
         setStatus({ type: "success" });
+        getMarks();
       })
       .catch((error) => {
         setStatus({ type: "Error" });
@@ -154,6 +151,7 @@ export default function EvaluationForm() {
     })
       .then((response) => {
         setStatus({ type: "success" });
+        getMarks();
       })
       .catch((error) => {
         setStatus({ type: "Error" });
@@ -161,9 +159,9 @@ export default function EvaluationForm() {
   };
 
   //validation
+
   const checkpomarks = (value) => {
-    const error = document.getElementById("poerror");
-    //error.innerHTML = "Hello";
+    const error = document.getElementById("pomarkserror");
     var numbers = /^[0-9]+$/;
     if (value === null || value === "") {
       error.innerHTML =
@@ -253,7 +251,7 @@ export default function EvaluationForm() {
       document.getElementById("cmarksbutton").disabled = true;
     } else if (value > 10) {
       error.innerHTML =
-        "<span style='color: red'>Error: Marks can not be more than 20</span>";
+        "<span style='color: red'>Error: Marks can not be more than 10</span>";
       document.getElementById("cmarksbutton").disabled = true;
     } else if (!value.match(numbers)) {
       error.innerHTML =
@@ -409,6 +407,21 @@ export default function EvaluationForm() {
       document.getElementById("dpmarksbutton").disabled = true;
     }
   };
+  // //getting the marks details for a particular student
+  const [marksDetails, setMarksDetails] = useState([]);
+
+  const getMarks = async () => {
+    const marksResponse = await Axios.get("http://localhost:3001/getMarks", {
+      params: { id: sessionStorage.getItem("StudentCardID") },
+    });
+    setMarksDetails(marksResponse.data);
+    console.log(marksResponse.data);
+  };
+
+  useEffect(() => {
+    getMarks();
+  }, []);
+
   //marks table should consist
   //1. student id
   //2. guide id - the guide who is evaluating the student
@@ -432,7 +445,36 @@ export default function EvaluationForm() {
       <GuideSideBar />
       <main id="main" className="main">
         <div className="card-body ml-5">
+          {/* marksDetails */}
           <div className="pagetitle">
+            <h1>Marks Awarded</h1>
+          </div>
+          <div className="card col-lg-8 mt-4">
+            <div className="card-body pl-5 pr-5">
+              <h5 className="card-title">
+                Marks Awarded to {sessionStorage.getItem("StudentCardID")}
+              </h5>
+              <table className="table">
+                <tbody>
+                  <tr>
+                    <th> Category</th>
+                    <th>Marks</th>
+                  </tr>
+
+                  {marksDetails.map((item) => {
+                    return (
+                      <tr>
+                        <td> {item.CATEGORY}</td>
+                        <td>{item.MARKS}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="pagetitle mt-5 mb-4">
             <h1>CIA Components</h1>
           </div>
           <div className="d-flex flex-row gap-4 flex-wrap">
@@ -470,7 +512,7 @@ export default function EvaluationForm() {
                   <div className="text-center">
                     <button
                       id="pomarksbutton"
-                      disabled="disabled"
+                      // disabled="disabled"
                       type="submit"
                       className="btn w-100 mt-3"
                       style={{ backgroundColor: "#012971", color: "white" }}
@@ -521,7 +563,7 @@ export default function EvaluationForm() {
                   <div className="text-center">
                     <button
                       id="rsmarksbutton"
-                      disabled="disabled"
+                      //disabled="disabled"
                       type="submit"
                       className="btn w-100 mt-3"
                       style={{ backgroundColor: "#012971", color: "white" }}
@@ -571,7 +613,7 @@ export default function EvaluationForm() {
                     <button
                       type="submit"
                       id="ddmarksbutton"
-                      disabled="disabled"
+                      //disabled="disabled"
                       className="btn w-100 mt-3"
                       style={{ backgroundColor: "#012971", color: "white" }}
                       onClick={(e) => {
@@ -619,7 +661,7 @@ export default function EvaluationForm() {
                   <div className="text-center">
                     <button
                       type="submit"
-                      disabled="disabled"
+                      //disabled="disabled"
                       id="cmarksbutton"
                       className="btn w-100 mt-3"
                       style={{ backgroundColor: "#012971", color: "white" }}
@@ -668,7 +710,7 @@ export default function EvaluationForm() {
                   <div className="text-center">
                     <button
                       type="submit"
-                      disabled="disabled"
+                      //disabled="disabled"
                       id="ctmarksbutton"
                       className="btn w-100 mt-3"
                       style={{ backgroundColor: "#012971", color: "white" }}
@@ -717,7 +759,7 @@ export default function EvaluationForm() {
                   <div className="text-center">
                     <button
                       type="submit"
-                      disabled="disabled"
+                      //disabled="disabled"
                       id="dmarksbutton"
                       className="btn w-100 mt-3"
                       style={{ backgroundColor: "#012971", color: "white" }}
@@ -736,7 +778,7 @@ export default function EvaluationForm() {
 
         {/* ESE Components */}
         <div className="card-body  ml-5">
-          <div className="pagetitle">
+          <div className="pagetitle mb-3">
             <h1>ESE Components</h1>
           </div>
           <div className="d-flex flex-row gap-4 flex-wrap">
@@ -799,7 +841,7 @@ export default function EvaluationForm() {
                   <div className="text-center">
                     <button
                       type="submit"
-                      disabled="disabled"
+                      //disabled="disabled"
                       id="aemarksbutton"
                       className="btn w-100 mt-4"
                       style={{ backgroundColor: "#012971", color: "white" }}
@@ -875,7 +917,7 @@ export default function EvaluationForm() {
                   <div className="text-center">
                     <button
                       type="submit"
-                      disabled="disabled"
+                      //disabled="disabled"
                       id="dpmarksbutton"
                       className="btn w-100 mt-4"
                       style={{ backgroundColor: "#012971", color: "white" }}

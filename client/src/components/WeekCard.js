@@ -1,5 +1,4 @@
 import React from "react";
-import { createClient } from "@supabase/supabase-js";
 
 export default function WeekCard(props) {
   return (

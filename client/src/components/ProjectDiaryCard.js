@@ -20,6 +20,7 @@ export default function ProjectDiaryCard(props) {
       workPlanned,
       workCompleted,
       date,
+      sessionStorage.getItem("StudentCardID"),
       feedback
     );
 
@@ -30,6 +31,7 @@ export default function ProjectDiaryCard(props) {
       work_completed: workCompleted,
       date: date,
       feedback: feedback,
+      student_id: sessionStorage.getItem("StudentCardID"),
     })
       .then((response) => {
         //console.log(response);

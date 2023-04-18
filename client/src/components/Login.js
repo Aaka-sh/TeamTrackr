@@ -24,8 +24,15 @@ export default function Login() {
         navigate("/studentdashboard");
         sessionStorage.studentName = response.data[0].username;
       } else if (response.data === "IncorrectPassword") {
-        console.log("Incorrect password");
+        const error = document.getElementById("error");
+        error.innerHTML =
+          "<span style='color: red'>Error: Incorrect Password</span>";
+        console.log("Incorrect Password");
       } else {
+        const error = document.getElementById("error");
+        error.innerHTML =
+          "<span style='color: red'>Error: Incorrect Username</span>";
+
         console.log("Incorrect Username");
       }
     });
@@ -92,6 +99,9 @@ export default function Login() {
                             required
                             onChange={(e) => setPassword(e.target.value)}
                           />
+                          <div className="mt-3 w-100">
+                            <p id="error"></p>
+                          </div>
                           <div className="invalid-feedback">
                             Please enter your password!
                           </div>
